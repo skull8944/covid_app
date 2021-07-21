@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>COVID-19 確診足跡地圖（統整自官方資料）</name>
+    <description><![CDATA[* 發現錯誤請在以下連結回報<br>https://forms.gle/J77mRMWBksdTtr336<br>* 請點擊此處，展開下方詳細介紹...<br><br>* 本地圖資料整合自 g0v 台灣 COVID-19 案例活動史共筆，收錄政府證實過的確診者足跡<br><br>* 台灣 COVID-19 案例活動史共筆: https://tinyurl.com/taiwan-g0v-covid-19-traces<br><br>* 地圖只顯示最近六週的足跡<br><br>* 每項足跡附上資料來源供查證<br><br>* Discord討論板: https://discord.gg/ePKuRGE9sF ，歡迎參與編輯、提供意見、回報錯誤<br><br>* 歡迎分享本地圖短網址: http://bit.ly/TaiwanCovidMap<br><br>* 如何在手機 App 關閉本地圖: https://bit.ly/3gxo6Qa<br><br>* 本地圖採用 CC BY 4.0 g0v contributors 授權，引用本資料請加註: 「COVID-19 確診足跡地圖由 g0v 社群彙整， g0v 貢獻者以創用 CC 姓名標示 4.0 授權，網址：http://bit.ly/TaiwanCovidMap」<br><br>* Please add this line to credit this work: "COVID-19 Case Traces Map is collected by the g0v community (CC BY 4.0 g0v contributors at http://bit.ly/TaiwanCovidMap)"]]></description>
+    <NetworkLink>
+      <name>COVID-19 確診足跡地圖（統整自官方資料）</name>
+      <Link>
+        <href>https://www.google.com/maps/d/u/0/kml?mid=1rrk8w7jJsZGXz_hSpi0q9no77cdhMC2z</href>
+      </Link>
+    </NetworkLink>
+  </Document>
+</kml>
