@@ -21,10 +21,9 @@ class _RunningState extends State<Running> {
       ? FutureBuilder<Position?>(
           future: geoService.getInitialLocation(),
           builder: (BuildContext context, AsyncSnapshot<Position?> snapshot) {
-            if(snapshot.hasData)
-              return RunningMap(snapshot.data);
-            else
-              return Loading();
+            return snapshot.connectionState == ConnectionState.done
+              ? RunningMap(snapshot.data)
+              : Loading();
           },
         )
       : Container(

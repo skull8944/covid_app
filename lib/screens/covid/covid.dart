@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:covid_app/services/covid_info_service.dart';
+import 'package:covid_app/models/covid_info.dart';
+import 'package:covid_app/screens/loading.dart';
 
 class Covid extends StatefulWidget {
   const Covid({ Key? key }) : super(key: key);
@@ -10,18 +12,57 @@ class Covid extends StatefulWidget {
 
 class _CovidState extends State<Covid> {
 
+  CovidInfoService _covidInfoService = CovidInfoService();
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: WebView(
-          initialUrl: 'https://www.google.com/maps/d/u/0/embed?mid=1rrk8w7jJsZGXz_hSpi0q9no77cdhMC2z&ll=22.992360212133317%2C120.19757256053016&z=13',
-          javascriptMode: JavascriptMode.unrestricted,
-        ),
-      )
+    return FutureBuilder<CovidInfo?>(
+      future: _covidInfoService.getCovidInfo(),
+      builder: (BuildContext context, AsyncSnapshot<CovidInfo?> snapshot) {
+        return snapshot.connectionState == ConnectionState.done 
+        ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '日期: ' + snapshot.data!.date, 
+                style: TextStyle(
+                  fontSize: 25.0
+                ),
+              ),
+              SizedBox(height:15.0),
+              Text(
+                '總確診數: ' + snapshot.data!.totalConfirmed, 
+                style: TextStyle(
+                  fontSize: 25.0
+                ),
+              ),
+              SizedBox(height:15.0),
+              Text(
+                '新增確診數: ' + snapshot.data!.newConfirmed, 
+                style: TextStyle(
+                  fontSize: 25.0
+                ),
+              ),
+              SizedBox(height:15.0),
+              Text(
+                '總死亡數: ' + snapshot.data!.totalDeath, 
+                style: TextStyle(
+                  fontSize: 25.0
+                ),
+              ),
+              SizedBox(height:15.0),
+              Text(
+                '新增死亡數: ' + snapshot.data!.newDeath, 
+                style: TextStyle(
+                  fontSize: 25.0
+                ),
+              ),
+            ],
+          ),
+        )
+        : Loading();
+      }
     );
   }
 }

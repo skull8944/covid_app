@@ -17,8 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  Future<String?> getName() async {
-    
+  Future<String?> getName() async {    
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? name = prefs.getString('name');
     return name;

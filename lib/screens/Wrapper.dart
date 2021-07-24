@@ -1,4 +1,5 @@
 import 'package:covid_app/screens/auth/login.dart';
+import 'package:covid_app/screens/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_app/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,7 +21,11 @@ class Wrapper extends StatelessWidget {
     return FutureBuilder(
       future: checkUser(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return snapshot.hasData ? Home() : Login();
+        return snapshot.connectionState == ConnectionState.waiting 
+          ? Loading() 
+          : snapshot.hasData 
+            ? Home()
+            : Login();
       }
     );
   }
