@@ -24,22 +24,30 @@ class _CovidState extends State<Covid> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height:15.0),
               Text(
-                '日期: ' + snapshot.data!.date, 
+                '累計確診: ' + snapshot.data!.totalConfirmed, 
                 style: TextStyle(
                   fontSize: 25.0
                 ),
               ),
               SizedBox(height:15.0),
               Text(
-                '總確診數: ' + snapshot.data!.totalConfirmed, 
+                '本土病例: ' + snapshot.data!.localConfirmed, 
                 style: TextStyle(
                   fontSize: 25.0
                 ),
               ),
               SizedBox(height:15.0),
               Text(
-                '新增確診數: ' + snapshot.data!.newConfirmed, 
+                '新增確診: ' + snapshot.data!.newTotalConfirmed, 
+                style: TextStyle(
+                  fontSize: 25.0
+                ),
+              ),
+              SizedBox(height:15.0),
+              Text(
+                '新增本土病例: ' + snapshot.data!.newLocalConfirmed, 
                 style: TextStyle(
                   fontSize: 25.0
                 ),
@@ -54,6 +62,20 @@ class _CovidState extends State<Covid> {
               SizedBox(height:15.0),
               Text(
                 '新增死亡數: ' + snapshot.data!.newDeath, 
+                style: TextStyle(
+                  fontSize: 25.0
+                ),
+              ),
+              SizedBox(height:15.0),
+              Text(
+                '台灣疫苗涵蓋率: ' + snapshot.data!.injection, 
+                style: TextStyle(
+                  fontSize: 25.0
+                ),
+              ),
+              SizedBox(height:15.0),
+              Text(
+                '新增疫苗接種數: ' + snapshot.data!.newInjection, 
                 style: TextStyle(
                   fontSize: 25.0
                 ),
