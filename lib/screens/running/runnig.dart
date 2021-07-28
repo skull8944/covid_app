@@ -13,20 +13,10 @@ class Running extends StatefulWidget {
 class _RunningState extends State<Running> {
 
   final geoService = GeolocatorService();
-  bool isRun = false;
 
   @override
   Widget build(BuildContext context) {
-    return isRun 
-      ? FutureBuilder<Position?>(
-          future: geoService.getInitialLocation(),
-          builder: (BuildContext context, AsyncSnapshot<Position?> snapshot) {
-            return snapshot.connectionState == ConnectionState.done
-              ? RunningMap(snapshot.data)
-              : Loading();
-          },
-        )
-      : Container(
+    return Container(
         color: Colors.grey,
         child: Center(
           child: Column(
@@ -51,9 +41,7 @@ class _RunningState extends State<Running> {
                       ),
                     ),
                     onPressed: () {
-                      setState(() {
-                        isRun = true;
-                      });
+                      Navigator.push(context, new MaterialPageRoute(builder: (context) => RunningMap()));
                     },
                   ),
                 ),

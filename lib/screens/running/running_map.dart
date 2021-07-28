@@ -3,17 +3,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:covid_app/services/geolocator_service.dart';
 import 'dart:async';
+import 'package:covid_app/screens/loading.dart';
 
 class RunningMap extends StatefulWidget {
-
-  final Position? initialPosition;
-  RunningMap(this.initialPosition);
-
   @override
   _CovidMapState createState() => _CovidMapState();
 }
 
 class _CovidMapState extends State<RunningMap> {
+
+  MarkerId _start = MarkerId('start');
 
   final geoService = GeolocatorService();
   Completer<GoogleMapController> _controller = Completer();
@@ -37,13 +36,32 @@ class _CovidMapState extends State<RunningMap> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(
-      target: LatLng(widget.initialPosition!.latitude, widget.initialPosition!.longitude), zoom: 21.0),
-      myLocationEnabled: true,
-      onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
-      },      
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.grey[700]),
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text('Running Map', style: TextStyle(color: Colors.grey[700]),),
+      ),
+      body: FutureBuilder<Position?>(
+        future: geoService.getInitialLocation(),
+        builder: (BuildContext context, AsyncSnapshot<Position?> snapshot) {
+          return snapshot.connectionState == ConnectionState.waiting
+            ? Loading()
+            : GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(snapshot.data!.latitude, snapshot.data!.longitude), zoom: 18.0
+              ),
+              myLocationEnabled: true,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },      
+              markers: {
+                Marker(position: LatLng(snapshot.data!.latitude, snapshot.data!.longitude), markerId: _start,),
+              },
+            );
+          },
+        ),
     );
   }
 }
