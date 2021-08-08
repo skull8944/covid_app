@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:covid_app/screens/loading.dart';
+import 'package:covid_app/screens/home/loading.dart';
 import 'package:covid_app/screens/auth/login.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:covid_app/models/user.dart';

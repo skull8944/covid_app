@@ -13,7 +13,7 @@ class GeolocatorService {
   
 
   // ignore: cancel_subscriptions
-  StreamSubscription<Position> positionStream = Geolocator.getPositionStream().listen((Position position) {
+  /*StreamSubscription<Position> positionStream = Geolocator.getPositionStream().listen((Position position) {
     // ignore: unnecessary_null_comparison
     print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
   });
@@ -21,7 +21,7 @@ class GeolocatorService {
   // ignore: cancel_subscriptions
   StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
     print(status);
-  });
+  });*/
 
   //算距離：每兩個點算加上去，for(var i = 0; i < n -1; i++) { a[i] + a[i+1] }
   double? calculateDistance(List<Position> list) {

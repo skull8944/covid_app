@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:covid_app/screens/running/running_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:covid_app/services/geolocator_service.dart';
-import 'package:covid_app/screens/loading.dart';
 
 class Running extends StatefulWidget {
 

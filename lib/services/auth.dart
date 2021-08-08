@@ -40,6 +40,7 @@ class Auth{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('token', response['user']);
       prefs.setString('name', response['name']);
+      prefs.setString('email', response['email']);
 
       return response;
     } else if(res.statusCode == 404) {

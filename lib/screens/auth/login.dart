@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:covid_app/screens/loading.dart';
+import 'package:covid_app/screens/home/loading.dart';
 import 'package:covid_app/screens/auth/signup.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:covid_app/services/auth.dart';
-import 'package:covid_app/screens/home.dart';
+import 'package:covid_app/screens/home/home.dart';
 
 class Login extends StatefulWidget {
   const Login({ Key? key }) : super(key: key);
@@ -163,7 +163,7 @@ class _LoginState extends State<Login> {
                       ),
                       TextButton(
                         onPressed: (){
-                          Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => SignUp()), (route) => false);
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SignUp()), (route) => false);
                         }, 
                         child: Text('註冊', 
                           style: TextStyle(

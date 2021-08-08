@@ -38,6 +38,9 @@ dependencies:
   webview_flutter: ^2.0.10
   google_maps_flutter: ^2.0.6
   geolocator: ^7.3.0
+  image_picker: ^0.8.2
+  dio: ^4.0.0
+
 
 
 

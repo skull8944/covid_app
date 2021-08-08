@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:covid_app/services/geolocator_service.dart';
 import 'dart:async';
-import 'package:covid_app/screens/loading.dart';
+import 'package:covid_app/screens/home/loading.dart';
 
 class RunningMap extends StatefulWidget {
   @override

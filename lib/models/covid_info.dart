@@ -1,5 +1,5 @@
 class CovidInfo {
-
+  String date;
   String totalConfirmed;
   String localConfirmed;
   String newTotalConfirmed;
@@ -9,7 +9,8 @@ class CovidInfo {
   String injection;
   String newInjection;
 
-  CovidInfo(this.totalConfirmed, this.localConfirmed, 
+  CovidInfo(this.date,
+            this.totalConfirmed, this.localConfirmed, 
             this.newTotalConfirmed, this.newLocalConfirmed, 
             this.totalDeath, this.newDeath,
             this.injection, this.newInjection);

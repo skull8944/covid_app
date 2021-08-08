@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:covid_app/screens/Wrapper.dart';
+import 'package:covid_app/screens/home/Wrapper.dart';
 import 'package:flutter/material.dart';
 void main() {
   HttpOverrides.global = new MyHttpOverrides();

@@ -1,7 +1,7 @@
 import 'package:covid_app/screens/auth/login.dart';
-import 'package:covid_app/screens/loading.dart';
+import 'package:covid_app/screens/home/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:covid_app/screens/home.dart';
+import 'package:covid_app/screens/home/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Wrapper extends StatelessWidget {  
