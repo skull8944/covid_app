@@ -1,14 +1,9 @@
-import 'package:covid_app/screens/home/setting_form.dart';
 import 'package:flutter/material.dart';
-import '../auth/login.dart';
-import 'package:covid_app/screens/auth/login.dart';
 import 'package:covid_app/screens/social/social.dart';
 import 'package:covid_app/screens/running/runnig.dart';
 import 'package:covid_app/screens/diet/diet.dart';
 import 'package:covid_app/screens/covid/covid.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:covid_app/screens/home/menu_drawer.dart';
 
 class Home extends StatefulWidget {
   const Home({ Key? key }) : super(key: key);
@@ -33,11 +28,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.grey[700]),
-      ),
-      drawer: MenuDrawer(),
       body: IndexedStack(
         index: screenIndex,
         children: screens,

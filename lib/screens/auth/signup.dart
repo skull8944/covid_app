@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:covid_app/screens/home/loading.dart';
 import 'package:covid_app/screens/auth/login.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:covid_app/models/user.dart';
 import 'package:covid_app/services/auth.dart';
 
 class SignUp extends StatefulWidget {
@@ -22,8 +21,6 @@ class _SignUpState extends State<SignUp> {
   String emailError = '';
   String passwordError = '';
   String nameError = '';
-
-  User user = User('', '');
 
   @override
   Widget build(BuildContext context) {

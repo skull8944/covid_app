@@ -1,7 +1,10 @@
+import 'package:covid_app/models/profile.dart';
+import 'package:covid_app/models/user.dart';
 import 'package:covid_app/screens/auth/login.dart';
-import 'package:covid_app/screens/home/setting_form.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:covid_app/services/profile_service.dart';
+import 'package:covid_app/screens/profile/user_profile.dart';
 
 class MenuDrawer extends StatefulWidget {
   @override
@@ -9,90 +12,108 @@ class MenuDrawer extends StatefulWidget {
 }
 
 class _MenuDrawerState extends State<MenuDrawer> {
-  
-  Future<String?> getEmail() async {    
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? email = prefs.getString('email');
-    return email;
+
+  static String imgUrl = 'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true';
+  ProfileService _profileService = ProfileService();
+  Profile _profile = Profile('', '', '', '', imgUrl);
+  User _user = User('', '', '');
+  int imgVersion = 0;
+  bool circle = false;
+
+  void _getProfile() async {
+    _profile = await _profileService.getPro();
+    if(mounted) {
+      setState(() {
+        if(_profile.imgUrl == '' || _profile.imgUrl.isEmpty) {
+          _profile.imgUrl = imgUrl;
+        } else {
+          _profile.imgUrl += '?v=$imgVersion';
+        }
+        imgVersion++;
+        circle = false;
+      });
+    }
+    
+    print('drawer: ${_profile.imgUrl}');
   }
 
-  Future<String?> getName() async {    
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? name = prefs.getString('name');
-    return name;
+  void _getUser() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _user.email = (_prefs.getString('email'))!;
+      _user.token = (_prefs.getString('token'))!;
+      _user.name = (_prefs.getString('name'))!;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUser();
+    _getProfile();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Drawer(
-        child: Column(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  UserAccountsDrawerHeader(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[700]
-                    ),
-                    accountName: FutureBuilder(
-                      future: getName(),
-                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {  
-                        return Text(snapshot.data.toString(), style: TextStyle(fontSize: 20.0, color: Colors.white),);
-                      },                
-                    ),
-                    accountEmail: FutureBuilder(
-                      future: getEmail(),
-                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {  
-                        return Text(snapshot.data.toString(), style: TextStyle(fontSize: 20.0, color: Colors.white),);
-                      },                
-                    ),
-                    currentAccountPicture: CircleAvatar(
-                      radius: 50.0,
-                      backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage('https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true'),
-                    ),
+    return circle
+    ? CircularProgressIndicator()
+    : Drawer(
+      child: Column(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                UserAccountsDrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[700]
                   ),
-                  ListTile(
-                    leading: Icon(Icons.person, size: 35.0,),
-                    title: Text('Profile', style: TextStyle(fontSize: 18.0)),
-                    onTap: () {                      
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsForm()));
-                    },
-                  ),
-                  Divider(color: Colors.black,),
-                ],
-              )
-            ),
-            Container(
-              child: Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        Divider(color: Colors.grey,),
-                        ListTile(
-                          leading: Icon(Icons.settings, size: 35.0),
-                          title: Text('Settings', style: TextStyle(fontSize: 18.0)),
-                          onTap: () {
+                  accountName: Text(_user.name, style: TextStyle(fontSize: 20.0, color: Colors.white),),
+                  accountEmail: Text(_user.email, style: TextStyle(fontSize: 20.0, color: Colors.white),),
+                  currentAccountPicture: CircleAvatar(
+                    radius: 50.0,
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(_profile.imgUrl),
+                  ), 
+                ),
+                ListTile(
+                  leading: Icon(Icons.person, size: 35.0,),
+                  title: Text('Profile', style: TextStyle(fontSize: 18.0)),
+                  onTap: () {         
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile( notifyParent: () { _getProfile(); }, imgVersion: imgVersion,)));
+                  },
+                ),
+                Divider(color: Colors.black,),
+              ],
+            )
+          ),
+          Container(
+            child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Divider(color: Colors.grey,),
+                    ListTile(
+                      leading: Icon(Icons.settings, size: 35.0),
+                      title: Text('Settings', style: TextStyle(fontSize: 18.0)),
+                      onTap: () {
 
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.logout_outlined, size: 35.0),
-                          title: Text('Logout', style: TextStyle(fontSize: 18.0)),
-                          onTap: () async {
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login()), (route) => false);
-                          },
-                        ),
-                      ],
-                  )
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.logout_outlined, size: 35.0),
+                      title: Text('Logout', style: TextStyle(fontSize: 18.0)),
+                      onTap: () async {
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login()), (route) => false);
+                      },
+                    ),
+                  ],
                 )
               )
             )
-          ],
-        ),
-      )
+          )
+        ],
+      ),          
     );
   }
 }
