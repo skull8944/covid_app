@@ -1,6 +1,8 @@
 import 'package:covid_app/screens/home/menu_drawer.dart';
+import 'package:covid_app/screens/social/add_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:covid_app/screens/social/blogList.dart';
 
 class Social extends StatefulWidget {
   const Social({ Key? key }) : super(key: key);
@@ -19,6 +21,11 @@ class _SocialState extends State<Social> {
   }
 
   bool _showPlusButton = true;
+  List<String> imgUrls = [
+    'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true',
+    'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true',
+    'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true'
+    ];
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +35,7 @@ class _SocialState extends State<Social> {
         iconTheme: IconThemeData(color: Colors.grey[700]),
         elevation: 0,
       ),
+      backgroundColor: Colors.white,
       drawer: MenuDrawer(),
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
@@ -42,10 +50,11 @@ class _SocialState extends State<Social> {
         },
         child: ListView.builder(
           controller: _scrollController,
-          itemCount: 100,
+          itemCount: 5,
           itemBuilder:(BuildContext context, int index) {
-            return ListTile(
-              title: Text('Item: $index'),
+            return BlogList(
+              userName: index.toString(), 
+              imgUrls: imgUrls
             );
           }
           ),
@@ -56,7 +65,19 @@ class _SocialState extends State<Social> {
           backgroundColor: Colors.grey[700],
           child: Icon(Icons.add_rounded, size: 28.0,),
           onPressed: () {
-            
+            showModalBottomSheet(
+              context: context, 
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
+                )
+              ), 
+              enableDrag: true,
+              isDismissible: false,
+              isScrollControlled: true,
+              builder: (context) => AddPost()
+            );
           },
         )
         : null,

@@ -15,6 +15,21 @@ class _BlogViewState extends State<BlogView> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.95,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              CircleAvatar(),
+              TextButton(
+                child: Icon(Icons.ac_unit_outlined),
+                onPressed: () {
+                  
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
