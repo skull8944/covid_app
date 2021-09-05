@@ -38,7 +38,14 @@ class _CovidMapState extends State<RunningMap> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.6,
-      child: FutureBuilder<Position?>(
+      child: Center(
+        child: InkWell(
+          child: Icon(Icons.star_outline),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Loading()));
+          },
+        ),
+        /*FutureBuilder<Position?>(
         future: geoService.getInitialLocation(),
         builder: (BuildContext context, AsyncSnapshot<Position?> snapshot) {
           return snapshot.connectionState == ConnectionState.waiting
@@ -56,7 +63,7 @@ class _CovidMapState extends State<RunningMap> {
             },
           );
         },          
-      ),
-    );
+      ),*/
+    ));
   }
 }

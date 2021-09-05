@@ -96,9 +96,35 @@ class _RunningRecordState extends State<RunningRecord> {
                           Text('Calories', style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),),
                         ],
                       )
-                    )
+                    ),
+                    
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: 30,
+                        top: 15,
+                        bottom: 15 
+                      ),
+                      child: InkWell(
+                        child: Icon(Icons.zoom_out_map_rounded, color: Colors.black, size: 35,),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 30,
+                        top: 15,
+                        bottom: 15 
+                      ),
+                      child: InkWell(
+                        child: Icon(Icons.share, color: Colors.black, size: 35,),
+                      ),
+                    ),
+                  ],
+                )
               ],
             );            
           }          
