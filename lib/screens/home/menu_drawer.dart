@@ -101,6 +101,28 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           },
                         ),
                       ),
+                      Divider(color: Colors.black, height: 0,),
+                      Ink(
+                        color: Colors.grey[500],
+                        child: ListTile(
+                          leading: Icon(Icons.people_alt_outlined, size: 35.0, color: Colors.grey[800],),
+                          title: Text('Friends', style: TextStyle(fontSize: 18.0, color: Colors.grey[800])),
+                          onTap: () {         
+                            //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                          },
+                        ),
+                      ),
+                      Divider(color: Colors.black, height: 0,),
+                      Ink(
+                        color: Colors.grey[500],
+                        child: ListTile(
+                          leading: Icon(Icons.turned_in_not_outlined, size: 35.0, color: Colors.grey[800],),
+                          title: Text('Favorites', style: TextStyle(fontSize: 18.0, color: Colors.grey[800])),
+                          onTap: () {         
+                            //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                          },
+                        ),
+                      ),
                     ],
                   )
                 ),

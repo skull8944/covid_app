@@ -36,32 +36,27 @@ class _CovidMapState extends State<RunningMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.grey[700]),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text('Running Map', style: TextStyle(color: Colors.grey[700]),),
-      ),
-      body: FutureBuilder<Position?>(
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.6,
+      child: FutureBuilder<Position?>(
         future: geoService.getInitialLocation(),
         builder: (BuildContext context, AsyncSnapshot<Position?> snapshot) {
           return snapshot.connectionState == ConnectionState.waiting
-            ? Loading()
-            : GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: LatLng(snapshot.data!.latitude, snapshot.data!.longitude), zoom: 18.0
-              ),
-              myLocationEnabled: true,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },      
-              markers: {
-                Marker(position: LatLng(snapshot.data!.latitude, snapshot.data!.longitude), markerId: _start,),
-              },
-            );
-          },
-        ),
+          ? Loading()
+          : GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: LatLng(snapshot.data!.latitude, snapshot.data!.longitude), zoom: 18.0
+            ),
+            myLocationEnabled: true,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },      
+            markers: {
+              Marker(position: LatLng(snapshot.data!.latitude, snapshot.data!.longitude), markerId: _start,),
+            },
+          );
+        },          
+      ),
     );
   }
 }

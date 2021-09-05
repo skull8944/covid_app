@@ -28,44 +28,63 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: IndexedStack(
         index: screenIndex,
         children: screens,
       ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0)
-        ),
-        child: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/img/home.svg', height: 30.0, width: 30.0, color: screenIndex == 0 ? Colors.grey[700] : Color.fromARGB(100, 159, 159, 160),),
-              label: 'Home',
-              backgroundColor: Color.fromARGB(255, 230, 230, 232)
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.all(14.0),
+        child: SafeArea(
+          child: Container(            
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromARGB(255, 149, 148, 149),
+                  blurRadius: 2.0,
+                  spreadRadius: 0.0,
+                  offset: Offset(2.0, 2.0)
+                )
+              ]
             ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/img/running.svg', height: 30.0, width: 30.0, color: screenIndex == 1 ? Colors.grey[700] : Color.fromARGB(100, 159, 159, 160),),
-              label: 'Running',
-              backgroundColor: Color.fromARGB(255, 230, 230, 232)
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: BottomNavigationBar(
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/img/home.svg', height: 30.0, width: 30.0, color: screenIndex == 0 ? Color.fromARGB(255, 246, 195, 100) : Colors.black,),
+                    label: 'Home',
+                    backgroundColor: Colors.white,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/img/running.svg', height: 30.0, width: 30.0, color: screenIndex == 1 ? Color.fromARGB(255, 246, 195, 100) : Colors.black,),
+                    label: 'Running',
+                    backgroundColor: Colors.white,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/img/diet.svg', height: 30.0, width: 30.0, color: screenIndex == 2 ? Color.fromARGB(255, 246, 195, 100) : Colors.black,),
+                    label: 'Diet',
+                    backgroundColor: Colors.white,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/img/covid.svg', height: 30.0, width: 30.0, color: screenIndex == 3 ? Color.fromARGB(255, 246, 195, 100) : Colors.black,),
+                    label: 'Covid',
+                    backgroundColor: Colors.white,
+                  ),
+                ],
+                elevation: 14,
+                enableFeedback: false,
+                showSelectedLabels: false,
+                backgroundColor: Colors.red,
+                currentIndex: screenIndex,
+                selectedItemColor: Colors.grey[700],
+                onTap: (index) {
+                  _changePage(index);
+                }
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/img/diet.svg', height: 30.0, width: 30.0, color: screenIndex == 2 ? Colors.grey[700] : Color.fromARGB(100, 159, 159, 160),),
-              label: 'Diet',
-              backgroundColor: Color.fromARGB(255, 230, 230, 232)
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/img/covid.svg', height: 30.0, width: 30.0, color: screenIndex == 3 ? Colors.grey[700] : Color.fromARGB(100, 159, 159, 160),),
-              label: 'Covid',
-              backgroundColor: Color.fromARGB(255, 230, 230, 232)
-            ),
-          ],
-          currentIndex: screenIndex,
-          unselectedItemColor: Color.fromARGB(100, 159, 159, 160),
-          selectedItemColor: Colors.grey[700],
-          onTap: (index) {
-            _changePage(index);
-          }
+          ),
         ),
       ),
     );

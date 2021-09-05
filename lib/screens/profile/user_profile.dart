@@ -9,6 +9,8 @@ import 'package:covid_app/services/profile_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:covid_app/screens/profile/height_edit.dart';
 import 'package:covid_app/models/profile.dart';
+import 'package:covid_app/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatefulWidget {
   final Function() notifyParent;
@@ -34,6 +36,7 @@ class _UserProfileState extends State<UserProfile> {
   bool _showBirthdateEdit = false;
   Profile _profile = Profile('', '', '', '', imgUrl);
   int imgVersion = 0;
+  User _user = User('', '', '');
 
   Future<void> getImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -59,9 +62,16 @@ class _UserProfileState extends State<UserProfile> {
         }
         circle = false;
       });
-    }
-    
+    }    
     print('pro: ${_profile.imgUrl}');
+  }
+
+  void _getUser() async {    
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _user.email = _prefs.getString('email').toString();
+    _user.token = _prefs.getString('token').toString();
+    _user.name = _prefs.getString('name').toString();
+    print('user: ${_user.email} ${_user.name}');
   }
   
   @override
@@ -71,6 +81,7 @@ class _UserProfileState extends State<UserProfile> {
       imgVersion = widget.imgVersion;
     });
     _getProfile();
+    _getUser();
   }
 
   @override
@@ -117,7 +128,10 @@ class _UserProfileState extends State<UserProfile> {
                     ],
                   ),
                 ),
-                SizedBox(height: 75.0,),
+                SizedBox(height: 10.0,),
+                Text(_user.name, style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w500),),
+                Text(_user.email, style: TextStyle(fontSize: 18.0)),
+                SizedBox(height: 45.0,),
                 ListTile(
                   leading: Text('身高:', style: TextStyle(color: Colors.white, fontSize: 20.0),),
                   title: Row(

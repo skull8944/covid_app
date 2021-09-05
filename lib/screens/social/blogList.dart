@@ -33,7 +33,7 @@ class _BlogListState extends State<BlogList> {
           child: Column(
             children: [
               Container(
-                color: Colors.white,
+                color: Color.fromARGB(255, 236, 236, 239),
                 child: ListTile(
                   contentPadding: EdgeInsets.all(0),
                   leading: InkWell(
