@@ -43,6 +43,7 @@ dependencies:
   flutter_switch: ^0.3.2
   get: ^4.3.8
   dotted_line: ^3.0.0
+  flutter_slidable: ^0.6.0
 
   
 

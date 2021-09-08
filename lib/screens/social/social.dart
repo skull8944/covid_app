@@ -40,6 +40,7 @@ class _SocialState extends State<Social> {
         itemBuilder:(BuildContext context, int index) {
           return BlogList(
             userName: index.toString(), 
+            date: DateTime.now().year.toString() + '/' + DateTime.now().month.toString() + '/' + DateTime.now().day.toString(),
             imgUrls: imgUrls
           );
         }          
