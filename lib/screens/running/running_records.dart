@@ -1,3 +1,4 @@
+import 'package:covid_app/screens/social/add_post.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -74,7 +75,17 @@ class _RunningRecordState extends State<RunningRecord> {
                         color: Colors.indigo,
                         icon: Icons.share,
                         onTap: () => {
-                          
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            isDismissible: false,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+                            ),
+                            context: context, 
+                            builder: (BuildContext context) {
+                              return AddPost(distance: '13m', pace: '06:12', calories: '132',);
+                            }
+                          )
                         },
                       ),
                     ],
@@ -141,32 +152,7 @@ class _RunningRecordState extends State<RunningRecord> {
                         
                       ],
                     ),
-                  ),
-                  /*Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                          right: 30,
-                          top: 15,
-                          bottom: 15 
-                        ),
-                        child: InkWell(
-                          child: Icon(Icons.zoom_out_map_rounded, color: Colors.black, size: 35,),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: 30,
-                          top: 15,
-                          bottom: 15 
-                        ),
-                        child: InkWell(
-                          child: Icon(Icons.share, color: Colors.black, size: 35,),
-                        ),
-                      ),
-                    ],
-                  )*/
+                  ),                  
                 ],
               ),
             );            

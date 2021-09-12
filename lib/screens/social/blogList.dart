@@ -29,8 +29,6 @@ class _BlogListState extends State<BlogList> {
       child: Container(
         margin: EdgeInsets.all(5.0),
         padding: EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width,
-        height: 315.0,
         child: Center(
           child: Column(
             children: [
@@ -97,15 +95,10 @@ class _BlogListState extends State<BlogList> {
                       child: Container(
                         child: Stack(
                           children: <Widget>[
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => Loading()));
-                              },
-                              child: Image.network(
-                                item,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
+                            Image.network(
+                              item,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
                             ),
                           ],
                         ),

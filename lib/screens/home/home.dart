@@ -53,22 +53,30 @@ class _HomeState extends State<Home> {
               child: BottomNavigationBar(
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
-                    icon: SvgPicture.asset('assets/img/home.svg', height: 30.0, width: 30.0, color: screenIndex == 0 ? Color.fromARGB(255, 246, 195, 100) : Colors.black,),
+                    icon: screenIndex == 0
+                      ? Image.asset('assets/img/home.png', height: 30.0, width: 30.0)
+                      : SvgPicture.asset('assets/img/home.svg', height: 30.0, width: 30.0, color: Colors.black,),
                     label: 'Home',
                     backgroundColor: Colors.white,
                   ),
                   BottomNavigationBarItem(
-                    icon: SvgPicture.asset('assets/img/running.svg', height: 30.0, width: 30.0, color: screenIndex == 1 ? Color.fromARGB(255, 246, 195, 100) : Colors.black,),
+                    icon: screenIndex == 1
+                      ? Image.asset('assets/img/running.png', height: 30.0, width: 30.0)
+                      : SvgPicture.asset('assets/img/running.svg', height: 30.0, width: 30.0, color: Colors.black,),                    
                     label: 'Running',
                     backgroundColor: Colors.white,
                   ),
                   BottomNavigationBarItem(
-                    icon: SvgPicture.asset('assets/img/diet.svg', height: 30.0, width: 30.0, color: screenIndex == 2 ? Color.fromARGB(255, 246, 195, 100) : Colors.black,),
+                    icon: screenIndex == 2
+                      ? Image.asset('assets/img/diet.png', height: 30.0, width: 30.0)
+                      : SvgPicture.asset('assets/img/diet.svg', height: 30.0, width: 30.0, color: Colors.black,),                    
                     label: 'Diet',
                     backgroundColor: Colors.white,
                   ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset('assets/img/covid.svg', height: 30.0, width: 30.0, color: screenIndex == 3 ? Color.fromARGB(255, 246, 195, 100) : Colors.black,),
+                  BottomNavigationBarItem(                    
+                    icon: screenIndex == 3
+                      ? Image.asset('assets/img/covid.png', height: 30.0, width: 30.0)
+                      : SvgPicture.asset('assets/img/covid.svg', height: 30.0, width: 30.0, color: Colors.black,),
                     label: 'Covid',
                     backgroundColor: Colors.white,
                   ),
