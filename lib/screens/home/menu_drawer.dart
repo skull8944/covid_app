@@ -150,6 +150,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             leading: Icon(Icons.logout_outlined, size: 35.0),
                             title: Text('Logout', style: TextStyle(fontSize: 18.0, color: Colors.grey[800])),
                             onTap: () async {
+                              SharedPreferences _prefs = await SharedPreferences.getInstance();
+                              await _prefs.clear();
                               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login()), (route) => false);
                             },
                           ),

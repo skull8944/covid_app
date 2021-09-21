@@ -57,11 +57,17 @@ class _SignUpState extends State<SignUp> {
                           setState(() {
                             nameError = '請輸入名字';
                           });
-                        }else{
+                          return '';
+                        } else if(val.length > 8) {
                           setState(() {
-                            nameError = val.length <= 8 ? '' : '請輸入長度小於8的名字';
+                            nameError = '請輸入長度小於8的名字';
                           });
-                        }
+                          return '';
+                        } 
+                        setState(() {
+                          nameError = '';
+                        });
+                        return null;                        
                       },
                       onChanged: (val) {
                         setState(() {
@@ -69,7 +75,7 @@ class _SignUpState extends State<SignUp> {
                         });
                       },
                     ),
-                    Text(emailError, style: TextStyle(color: Colors.red, fontSize: 18.0),),
+                    Text(nameError, style: TextStyle(color: Colors.red, fontSize: 18.0),),
                     SizedBox(
                       height: 15.0,
                     ),
@@ -85,15 +91,21 @@ class _SignUpState extends State<SignUp> {
                     TextFormField(
                       //email
                       validator: (val) {
-                        if(val!.isEmpty){
+                        if(val!.isEmpty) {
                           setState(() {
                             emailError = '請輸入email';
                           });
-                        }else{
+                          return '';
+                        } else if(EmailValidator.validate(val) == false) {
                           setState(() {
-                            emailError = (EmailValidator.validate(val) == true) ? '' : '請輸入有效的email';
+                            emailError = '請輸入有效的email';
                           });
-                        }
+                          return '';
+                        } 
+                        setState(() {
+                          emailError = '';
+                        });
+                        return null;
                       },
                       onChanged: (val) {
                         setState(() {
@@ -118,15 +130,23 @@ class _SignUpState extends State<SignUp> {
                       //password                       
                       obscureText: true,
                       validator: (val) {
-                        if(val!.isEmpty)
+                          if(val!.isEmpty) {
+                            setState(() {
+                              passwordError ='請輸入密碼';
+                            }); 
+                            return '';
+                          }                        
+                          else if(val.length < 6) {
+                            setState(() {
+                              passwordError =  '請輸入長度大於6的密碼';
+                            });    
+                            return '';
+                          }
                           setState(() {
-                            passwordError ='請輸入密碼';
-                          });                         
-                        else
-                          setState(() {
-                            passwordError = val.length >= 6 ? '' : '請輸入長度大於6的密碼';
-                          });    
-                      }, 
+                            passwordError = '';
+                          });
+                          return null;
+                        }, 
                       onChanged: (val) {
                         setState(() {
                           password = val;
@@ -137,48 +157,42 @@ class _SignUpState extends State<SignUp> {
                     SizedBox(
                       height: 35.0,
                     ),
-                    ConstrainedBox(
-                      constraints:
-                          BoxConstraints.tightFor(width: 250.0, height: 50.0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if(_formKey.currentState!.validate()) {
-                            setState(() {
-                              loading = true;
-                            });
-                            dynamic result = await _auth.signup(email.trim(), password.trim(), name.trim());
-                            setState(() {
-                              loading = false;
-                            });
-                            if(result['user'] == null) {
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Container(
+                        width: 250,
+                        height: 50,
+                        color: Color.fromARGB(255, 246, 195, 100),
+                        child: InkWell(
+                          child: Center(child: Text('註冊', style: TextStyle(color: Colors.white, fontSize: 24.0))),
+                          onTap: () async {
+                            if(_formKey.currentState!.validate()) {
                               setState(() {
-                                emailError = result['email'];
+                                loading = true;
                               });
-                            } else {
-                              Navigator.pop(context, new MaterialPageRoute(builder: (context) => Login()));
+                              dynamic result = await _auth.signup(email.trim(), password.trim(), name.trim());
+                              setState(() {
+                                loading = false;
+                              });
+                              if(result['user'] == null) {
+                                setState(() {
+                                  emailError = result['email'];
+                                  nameError = result['name'];
+                                });
+                              } else {
+                                Navigator.pop(context, new MaterialPageRoute(builder: (context) => Login()));
+                              }
                             }
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(100, 159, 159, 160)),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0),
-                            )
-                          )
-                        ),
-                        child: Text(
-                          '註冊',
-                          style: TextStyle(color: Colors.white, fontSize: 24.0),
+                          },
                         ),
                       ),
-                    ),
+                    ),                    
                     SizedBox(
                       height: 10.0,
                     ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => Login()), (route) => false);
+                    InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
                       }, 
                       child: Text('登入', 
                         style: TextStyle(

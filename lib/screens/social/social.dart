@@ -41,7 +41,9 @@ class _SocialState extends State<Social> {
           return BlogList(
             userName: index.toString(), 
             date: DateTime.now().year.toString() + '/' + DateTime.now().month.toString() + '/' + DateTime.now().day.toString(),
-            imgUrls: imgUrls
+            imgUrls: imgUrls,
+            time: '06:12',
+            distance: '13m',
           );
         }          
       ),      

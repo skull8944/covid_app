@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
-
 class Blog {
-  String userToken;
+  String postID;
   String userName;
-  List<Image> images;
-  String content;
+  List<String> images;
+  String distance;
+  String time;
   String updatedTime;
+  bool collect;
 
-  Blog(this.userToken , this.userName, this.images, this.content, this.updatedTime);
+  Blog(this.postID, this.userName, this.images, this.distance, this.time, this.updatedTime, this.collect);
 }

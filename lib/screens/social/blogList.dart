@@ -1,12 +1,14 @@
-import 'package:covid_app/screens/home/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BlogList extends StatefulWidget {
   final String userName;
   final String date;
   final List<String> imgUrls;
-  const BlogList({ Key? key, required this.userName, required this.date, required this.imgUrls }) : super(key: key);
+  final String distance;
+  final String time;
+  const BlogList({ Key? key, required this.userName, required this.date, required this.imgUrls, required this.distance, required this.time }) : super(key: key);
 
   @override
   _BlogListState createState() => _BlogListState();
@@ -115,7 +117,7 @@ class _BlogListState extends State<BlogList> {
                   return Container(
                     width: 10.0,
                     height: 10.0,
-                    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                    margin: EdgeInsets.symmetric( horizontal: 2.0),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: _currentIndex == index
@@ -124,6 +126,31 @@ class _BlogListState extends State<BlogList> {
                     ),
                   );
                 }).toList(),
+              ),
+              Row(
+                children: <Widget>[
+                  Text('中正紀念堂'),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: SvgPicture.asset('assets/img/time.svg', color: Colors.grey[750], width: 15, height: 15,),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Text(widget.time, style: TextStyle(color: Colors.grey[750]),),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: SvgPicture.asset('assets/img/distance.svg', color: Colors.grey[750],),
+                        ),
+                        Text(widget.distance, style: TextStyle(color: Colors.grey[750]),),
+                      ],
+                    )
+                  )
+                ],
               )
             ],
           ),

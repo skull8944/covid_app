@@ -49,6 +49,6 @@
 		<true/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Replace with your permission description.</string>
+	<string>獲取圖片及使用相冊拍照以便上傳動態圖片</string>
 </dict>
 </plist>

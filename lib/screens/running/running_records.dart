@@ -83,7 +83,7 @@ class _RunningRecordState extends State<RunningRecord> {
                             ),
                             context: context, 
                             builder: (BuildContext context) {
-                              return AddPost(distance: '13m', pace: '06:12', calories: '132',);
+                              return AddPost(distance: '13m', time: '06:12', calories: '132',);
                             }
                           )
                         },
