@@ -1,7 +1,7 @@
 class Blog {
   String postID;
   String userName;
-  List<String> images;
+  List images;
   String distance;
   String time;
   String updatedTime;

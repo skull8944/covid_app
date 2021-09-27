@@ -2,6 +2,7 @@ import 'package:covid_app/models/profile.dart';
 import 'package:covid_app/models/user.dart';
 import 'package:covid_app/screens/auth/login.dart';
 import 'package:covid_app/screens/home/seach.dart';
+import 'package:covid_app/screens/social/mypost.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:covid_app/services/profile_service.dart';
@@ -18,7 +19,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
   ProfileService _profileService = ProfileService();
   Profile _profile = Profile('', '', '', '', imgUrl);
   User _user = User('', '', '');
-  int imgVersion = 0;
   bool circle = false;
 
   void _getProfile() async {
@@ -27,10 +27,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
       setState(() {
         if(_profile.imgUrl == '' || _profile.imgUrl.isEmpty) {
           _profile.imgUrl = imgUrl;
-        } else {
-          _profile.imgUrl += '?v=$imgVersion';
-        }
-        imgVersion++;
+        } 
         circle = false;
       });
     }
@@ -59,96 +56,116 @@ class _MenuDrawerState extends State<MenuDrawer> {
     return circle
     ? CircularProgressIndicator()
     : SafeArea(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.56,
-        child: Drawer(
-          child: Ink(
-            color: Colors.grey[600],
-            child: Column(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Ink(
-                        color: Colors.grey[500],
-                        child: ListTile(
-                          leading: CircleAvatar(backgroundImage: NetworkImage(_profile.imgUrl), backgroundColor: Colors.grey,),
-                          title: Text(_user.name, style: TextStyle(fontSize: 18.0, color: Colors.grey[800])),
-                          onTap: () {
-                          
-                          },
-                        ),
-                      ),
-                      Divider(color: Colors.black, height: 0,),
-                      Ink(
-                        color: Colors.grey[500],
-                        child: ListTile(
-                          leading: Icon(Icons.person_outline_rounded, size: 35.0, color: Colors.grey[800],),
-                          title: Text('Profile', style: TextStyle(fontSize: 18.0, color: Colors.grey[800])),
-                          onTap: () {         
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile( notifyParent: () { _getProfile(); }, imgVersion: imgVersion,)));
-                          },
-                        ),
-                      ),
-                      Divider(color: Colors.black, height: 0,),
-                      Ink(
-                        color: Colors.grey[500],
-                        child: ListTile(
-                          leading: Icon(Icons.search, size: 35.0, color: Colors.grey[800],),
-                          title: Text('Search', style: TextStyle(fontSize: 18.0, color: Colors.grey[800])),
-                          onTap: () {         
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
-                          },
-                        ),
-                      ),
-                      Divider(color: Colors.black, height: 0,),
-                      Ink(
-                        color: Colors.grey[500],
-                        child: ListTile(
-                          leading: Icon(Icons.people_alt_outlined, size: 35.0, color: Colors.grey[800],),
-                          title: Text('Friends', style: TextStyle(fontSize: 18.0, color: Colors.grey[800])),
-                          onTap: () {         
-                            //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
-                          },
-                        ),
-                      ),
-                      Divider(color: Colors.black, height: 0,),
-                      Ink(
-                        color: Colors.grey[500],
-                        child: ListTile(
-                          leading: Icon(Icons.turned_in_not_outlined, size: 35.0, color: Colors.grey[800],),
-                          title: Text('Favorites', style: TextStyle(fontSize: 18.0, color: Colors.grey[800])),
-                          onTap: () {         
-                            //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-                ),
-                Divider(color: Colors.grey, thickness: 1, height: 0,),
-                Container(
-                  child: Align(
-                    alignment: FractionalOffset.bottomCenter,
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(40)
+        ),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.56,
+          child: Drawer(
+            child: Ink(
+              color: Colors.grey[900],
+              child: Column(
+                children: [
+                  Expanded(
                     child: Column(
-                      children: <Widget>[
-                        Divider(color: Colors.black, height: 0,),
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.04,
+                            bottom: MediaQuery.of(context).size.height * 0.01 
+                          ),
+                          child: Ink(
+                            color: Colors.grey[900],
+                            child: ListTile(
+                              leading: CircleAvatar(backgroundImage: NetworkImage(_profile.imgUrl), backgroundColor: Colors.grey,),
+                              title: Text(_user.name, style: TextStyle(fontSize: 23.0, color: Colors.white)),
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyPost()));
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.04,
+                            right: MediaQuery.of(context).size.width * 0.05
+                          ),
+                          child: Divider(color: Colors.grey[700], thickness: 2,),
+                        ),
                         Ink(
-                          color: Colors.grey[500],
+                          color: Colors.grey[900],
                           child: ListTile(
-                            leading: Icon(Icons.settings_outlined, size: 35.0),
-                            title: Text('Settings', style: TextStyle(fontSize: 18.0,  color: Colors.grey[800])),
-                            onTap: () {
-                          
+                            leading: Icon(Icons.person_outline_rounded, size: 35.0, color: Colors.white,),
+                            title: Text('Profile', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            onTap: () {         
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile( notifyParent: () { _getProfile(); },)));
                             },
                           ),
                         ),
-                        Divider(color: Colors.black, height: 0,),
                         Ink(
-                          color: Colors.grey[500],
+                          color: Colors.grey[900],
                           child: ListTile(
-                            leading: Icon(Icons.logout_outlined, size: 35.0),
-                            title: Text('Logout', style: TextStyle(fontSize: 18.0, color: Colors.grey[800])),
+                            leading: Icon(Icons.search, size: 35.0, color: Colors.white,),
+                            title: Text('Search', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            onTap: () {         
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                            },
+                          ),
+                        ),
+                        Ink(
+                          color: Colors.grey[900],
+                          child: ListTile(
+                            leading: Icon(Icons.people_alt_outlined, size: 35.0, color: Colors.white,),
+                            title: Text('Friends', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            onTap: () {         
+                              //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                            },
+                          ),
+                        ),
+                        Ink(
+                          color: Colors.grey[900],
+                          child: ListTile(
+                            leading: Icon(Icons.turned_in_not_outlined, size: 35.0, color: Colors.white,),
+                            title: Text('Favorites', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            onTap: () {         
+                              //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  ),
+                  Divider(color: Colors.grey[700], thickness: 1, height: 0,),
+                  Container(
+                    child: Align(
+                      alignment: FractionalOffset.bottomCenter,
+                      child: Ink(
+                        color: Colors.grey[900],
+                        child:  Padding(
+                          padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.03,
+                            bottom: MediaQuery.of(context).size.height * 0.03
+                          ),
+                          child: InkWell(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                height: MediaQuery.of(context).size.height * 0.08,
+                                color: Colors.grey[800],
+                                child: Center(
+                                  child: Text(
+                                    'Logout', 
+                                    style: TextStyle(
+                                      fontSize: 23.0, 
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600
+                                    )
+                                  ) 
+                                )
+                              )
+                            ),
                             onTap: () async {
                               SharedPreferences _prefs = await SharedPreferences.getInstance();
                               await _prefs.clear();
@@ -156,13 +173,14 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             },
                           ),
                         ),
-                      ],
-                    )
+                        
+                      ),
+                    )                    
                   )
-                )
-              ],
-            ),
-          ),          
+                ],
+              ),
+            ),          
+          ),
         ),
       ),
     );

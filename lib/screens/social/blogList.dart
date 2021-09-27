@@ -1,3 +1,5 @@
+import 'package:covid_app/models/profile.dart';
+import 'package:covid_app/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class BlogList extends StatefulWidget {
   final String userName;
   final String date;
-  final List<String> imgUrls;
+  final List imgUrls;
   final String distance;
   final String time;
   const BlogList({ Key? key, required this.userName, required this.date, required this.imgUrls, required this.distance, required this.time }) : super(key: key);
@@ -16,11 +18,23 @@ class BlogList extends StatefulWidget {
 
 class _BlogListState extends State<BlogList> {
 
-  final List<String> imagesList = [
-    'https://cdn.pixabay.com/photo/2020/11/01/23/22/breakfast-5705180_1280.jpg',
-    'https://cdn.pixabay.com/photo/2019/01/14/17/25/gelato-3932596_1280.jpg',
-    'https://cdn.pixabay.com/photo/2017/04/04/18/07/ice-cream-2202561_1280.jpg',
-  ];
+  String imgUrl = '';
+  ProfileService _profileService = ProfileService();
+
+  @override
+  void initState() {
+    super.initState();
+    _getImgUrl();
+    print(widget.userName);
+    print(widget.imgUrls);
+  }
+
+  void _getImgUrl() async {
+    final res = await _profileService.getPro();
+    setState(() {
+      imgUrl = res.imgUrl;
+    });    
+  }
 
   int _currentIndex = 0;
 
@@ -41,7 +55,7 @@ class _BlogListState extends State<BlogList> {
                   leading: InkWell(
                     child: CircleAvatar(
                       backgroundColor: Colors.grey,
-                      backgroundImage: NetworkImage('https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true'),
+                      backgroundImage: NetworkImage('$imgUrl'),
                     ),
                     onTap: () {
                       
@@ -83,7 +97,7 @@ class _BlogListState extends State<BlogList> {
                     );
                   },
                 ),
-                items: imagesList.map(
+                items: widget.imgUrls.map(
                   (item) =>  Card(
                     semanticContainer: true,
                     elevation: 1.0,
@@ -98,7 +112,7 @@ class _BlogListState extends State<BlogList> {
                         child: Stack(
                           children: <Widget>[
                             Image.network(
-                              item,
+                              'http://172.20.10.13:7414/${item.replaceAll(r'\', r'/')}',
                               fit: BoxFit.cover,
                               width: double.infinity,
                             ),
@@ -112,8 +126,8 @@ class _BlogListState extends State<BlogList> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: imagesList.map((urlOfItem) {
-                  int index = imagesList.indexOf(urlOfItem);
+                children: widget.imgUrls.map((urlOfItem) {
+                  int index = widget.imgUrls.indexOf(urlOfItem);
                   return Container(
                     width: 10.0,
                     height: 10.0,
@@ -121,8 +135,8 @@ class _BlogListState extends State<BlogList> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: _currentIndex == index
-                          ? Color.fromRGBO(0, 0, 0, 0.8)
-                          : Color.fromRGBO(0, 0, 0, 0.3),
+                        ? Color.fromRGBO(0, 0, 0, 0.8)
+                        : Color.fromRGBO(0, 0, 0, 0.3),
                     ),
                   );
                 }).toList(),

@@ -1,3 +1,4 @@
+import 'package:covid_app/screens/home/menu_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_app/screens/social/social.dart';
 import 'package:covid_app/screens/running/runnig.dart';
@@ -28,7 +29,17 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: screenIndex == 0
+      ? AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.grey[700]),
+          elevation: 0,
+        )
+      : null,
       extendBody: true,
+      drawer: screenIndex == 0
+        ? MenuDrawer()
+        : null,
       body: IndexedStack(
         index: screenIndex,
         children: screens,

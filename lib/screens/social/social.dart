@@ -20,26 +20,20 @@ class _SocialState extends State<Social> {
   }
 
   List<String> imgUrls = [
-    'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true',
-    'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true',
-    'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true'
-    ];
+    'blogPhotos/61485a3737762103d8d8348820219202221mountain-landscape-1024x883.jpg.jpg',
+    'blogPhotos/61485a3737762103d8d8348820219202221vector-mountain-sunset-landscape-first-person-view.webp.jpg',
+    'blogPhotos/6148991cea590948601a27a620219202222nature-scene-with-river-hills-forest-mountain-landscape-flat-cartoon-style-illustration_1150-37326.jpg.jpg',
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(      
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.grey[700]),
-        elevation: 0,
-      ),
-      backgroundColor: Color.fromARGB(255, 236, 236, 239),
-      drawer: MenuDrawer(),
+      backgroundColor: Color.fromARGB(255, 236, 236, 239),      
       body:ListView.builder(
         itemCount: 5,
         itemBuilder:(BuildContext context, int index) {
           return BlogList(
-            userName: index.toString(), 
+            userName: 'YuZhi', 
             date: DateTime.now().year.toString() + '/' + DateTime.now().month.toString() + '/' + DateTime.now().day.toString(),
             imgUrls: imgUrls,
             time: '06:12',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:covid_app/services/geolocator_service.dart';
@@ -40,7 +41,15 @@ class _CovidMapState extends State<RunningMap> {
       height: MediaQuery.of(context).size.height * 0.6,
       child: Center(
         child: InkWell(
-          child: Icon(Icons.star_outline),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(25),
+            child: Container(
+              width: 150,
+              height: 50,
+              color: Color.fromARGB(255, 246, 195, 100),
+              child: Center(child: Text('Run', style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w600),)),
+            ),
+          ),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Loading()));
           },

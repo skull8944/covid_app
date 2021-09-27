@@ -165,6 +165,7 @@ class _AddPostState extends State<AddPost> {
                     print(filesPaths);
                     dynamic imgRes = await _blogService.patchImage(res['postID'], filesPaths);
                     print(imgRes);
+                    Navigator.pop(context);
                   },
                 ),
               )

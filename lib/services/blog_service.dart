@@ -44,4 +44,28 @@ class BlogService {
     return res;
   }
 
+  Future<List<Blog>> getMyPost() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final userName = _prefs.getString('name');
+    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/myblog/$userName'));
+    List<Blog> myBlogList = [];
+    if(res.statusCode == 200 || res.statusCode == 201) {
+      List result = jsonDecode(res.body);
+      result.forEach((e) {
+        myBlogList.add(
+          Blog(
+            e['_id'], 
+            e['userName'], 
+            e['images'], 
+            e['distance'], 
+            e['time'], 
+            e['created_at'], 
+            e['collect'] == 'true'
+          )
+        );
+        print(myBlogList[0].images[0]);
+      });
+    }
+    return myBlogList;
+  }
 }

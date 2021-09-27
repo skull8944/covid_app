@@ -14,8 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatefulWidget {
   final Function() notifyParent;
-  final int imgVersion;
-  const UserProfile({ Key? key, required this.notifyParent, required this.imgVersion }) : super(key: key);
+  const UserProfile({ Key? key, required this.notifyParent }) : super(key: key);
 
 
   @override
@@ -35,7 +34,6 @@ class _UserProfileState extends State<UserProfile> {
   bool _showSexEdit = false;
   bool _showBirthdateEdit = false;
   Profile _profile = Profile('', '', '', '', imgUrl);
-  int imgVersion = 0;
   User _user = User('', '', '');
 
   Future<void> getImage(ImageSource source) async {
@@ -54,12 +52,9 @@ class _UserProfileState extends State<UserProfile> {
     _profile = await _profileService.getPro();
     if(mounted) {
       setState(() {
-        imgVersion++;
         if(_profile.imgUrl == '' || _profile.imgUrl.isEmpty) {
           _profile.imgUrl = imgUrl;
-        } else {
-          _profile.imgUrl += '?v=$imgVersion';
-        }
+        } 
         circle = false;
       });
     }    
@@ -77,9 +72,6 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      imgVersion = widget.imgVersion;
-    });
     _getProfile();
     _getUser();
   }
