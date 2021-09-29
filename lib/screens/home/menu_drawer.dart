@@ -156,7 +156,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                 color: Colors.grey[800],
                                 child: Center(
                                   child: Text(
-                                    'Logout', 
+                                    'LOG OUT', 
                                     style: TextStyle(
                                       fontSize: 23.0, 
                                       color: Colors.white,

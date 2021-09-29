@@ -1,16 +1,28 @@
-import 'package:covid_app/models/profile.dart';
+import 'package:covid_app/services/blog_service.dart';
 import 'package:covid_app/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BlogList extends StatefulWidget {
+  final String postID;
   final String userName;
   final String date;
   final List imgUrls;
   final String distance;
   final String time;
-  const BlogList({ Key? key, required this.userName, required this.date, required this.imgUrls, required this.distance, required this.time }) : super(key: key);
+  final Function deletePost;
+  const BlogList({ 
+    Key? key, 
+    required this.postID, 
+    required this.userName, 
+    required this.date, 
+    required this.imgUrls, 
+    required this.distance, 
+    required this.time,
+    required this.deletePost ,lete
+  }) : super(key: key);
 
   @override
   _BlogListState createState() => _BlogListState();
@@ -18,22 +30,33 @@ class BlogList extends StatefulWidget {
 
 class _BlogListState extends State<BlogList> {
 
+  bool showMore = false;
+  String myName = '';
   String imgUrl = '';
   ProfileService _profileService = ProfileService();
+  BlogService _blogService = BlogService();
+
+  void getMyName()  async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      myName = _prefs.getString('name')!;
+    });    
+  }
 
   @override
-  void initState() {
+  void initState() {    
     super.initState();
+    getMyName();
     _getImgUrl();
-    print(widget.userName);
-    print(widget.imgUrls);
   }
 
   void _getImgUrl() async {
     final res = await _profileService.getPro();
-    setState(() {
-      imgUrl = res.imgUrl;
-    });    
+    if(mounted) {
+      setState(() {
+        imgUrl = res.imgUrl;
+      });          
+    }
   }
 
   int _currentIndex = 0;
@@ -81,48 +104,89 @@ class _BlogListState extends State<BlogList> {
                     ],
                   ),
                   trailing: InkWell(
-                    child: Icon(Icons.turned_in_not_outlined, color: Colors.grey[700], size: 35.0,),
-                    onTap: () {
-
+                    child: Icon(
+                      myName == widget.userName
+                      ? Icons.more_vert_rounded
+                      : Icons.turned_in_not_outlined,
+                      color: Colors.grey[700], size: 35.0,
+                    ),
+                    onTap: () async {
+                      setState(() {
+                        showMore = !showMore;
+                      });
                     },
                   ),
                 ),
               ),
-              CarouselSlider(
-                options: CarouselOptions(
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                        _currentIndex = index;
+              Stack(
+                children: <Widget>[
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                            _currentIndex = index;
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
-                items: widget.imgUrls.map(
-                  (item) =>  Card(
-                    semanticContainer: true,
-                    elevation: 1.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
-                      ),
-                      child: Container(
-                        child: Stack(
-                          children: <Widget>[
-                            Image.network(
-                              'http://172.20.10.13:7414/${item.replaceAll(r'\', r'/')}',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
+                    items: widget.imgUrls.map(
+                      (item) =>  Card(
+                        semanticContainer: true,
+                        elevation: 1.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                          child: Container(
+                            child: Stack(
+                              children: <Widget>[
+                                Image.network(
+                                  'http://172.20.10.13:7414/${item.replaceAll(r'\', r'/')}',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                    )
+                    .toList(),
                   ),
-                )
-                .toList(),
+                  showMore 
+                    ? Positioned(
+                      right: 0,
+                      child: InkWell(
+                        child:ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
+                            color: Colors.white,
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete_rounded, size: 25,),
+                                Text('Delete', style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w600, fontSize: 14),),
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          final res = await _blogService.deletePost(widget.postID);
+                          print(res);
+                          setState(() {
+                            showMore = false;
+                          });
+                          if(res == 'success') {                            
+                            widget.deletePost(widget.postID);
+                          }
+                        },
+                      ),
+                    )
+                    : Container(width: 0, height: 0,)
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

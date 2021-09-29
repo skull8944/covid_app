@@ -33,11 +33,15 @@ class _SocialState extends State<Social> {
         itemCount: 5,
         itemBuilder:(BuildContext context, int index) {
           return BlogList(
+            postID: '87',
             userName: 'YuZhi', 
             date: DateTime.now().year.toString() + '/' + DateTime.now().month.toString() + '/' + DateTime.now().day.toString(),
             imgUrls: imgUrls,
             time: '06:12',
             distance: '13m',
+            deletePost: () {
+             
+            },
           );
         }          
       ),      

@@ -14,6 +14,31 @@ class MyPost extends StatefulWidget {
 class _MyPostState extends State<MyPost> {
 
   BlogService _blogService = BlogService();
+  List<Blog> myBlogList = [];
+  bool circle = false;
+  int postLength = 0;
+
+  @override
+  void initState() {    
+    super.initState();
+    getPostList();
+  }
+
+  void getPostList() async {
+    setState(() {
+      circle = true;
+    });
+    List<Blog> blogList = await _blogService.getMyPost();
+    if(blogList.length > 0) {
+      setState(() {
+        postLength = blogList.length;
+        myBlogList = blogList;
+      });
+    }
+    setState(() {
+      circle = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,29 +48,31 @@ class _MyPostState extends State<MyPost> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.grey[850]),
       ),
-      body: FutureBuilder(
-        future: _blogService.getMyPost(),
-        builder: (BuildContext context, AsyncSnapshot<List<Blog>> snapshot) {
-          return Center(
-            child: snapshot.connectionState != ConnectionState.done          
-            ? CircularProgressIndicator()
-            : snapshot.data!.length < 1
-              ? null
-              : ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int i) {
-                  return BlogList(
-                    userName: snapshot.data![i].userName, 
-                    date: snapshot.data![i].updatedTime,
-                    imgUrls: snapshot.data![i].images,
-                    time: snapshot.data![i].time,
-                    distance: snapshot.data![i].distance,
-                  );
-                }
-              )
-          );
-        },
-      )
+      body: Center(
+        child: circle == true          
+        ? CircularProgressIndicator()
+        : myBlogList.length == 0
+          ? Text('No Post Yet')
+          : ListView.builder(
+          itemCount: postLength,
+          itemBuilder: (BuildContext context, int i) {
+            return BlogList(
+              postID: myBlogList[i].postID,
+              userName: myBlogList[i].userName, 
+              date: myBlogList[i].updatedTime,
+              imgUrls: myBlogList[i].images,
+              time: myBlogList[i].time,
+              distance: myBlogList[i].distance,
+              deletePost: (String postID) {
+                myBlogList.removeWhere((item) => item.postID == postID);
+                setState(() {
+                  postLength--;
+                });
+              },
+            );
+          }          
+      ),
+  )
     );
   }
 }

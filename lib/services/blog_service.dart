@@ -68,4 +68,9 @@ class BlogService {
     }
     return myBlogList;
   }
+
+  Future deletePost(String postID) async {
+    final res = await http.delete(Uri.parse('http://172.20.10.13:7414/myblog/$postID'));
+    return res.body;
+  }
 }
