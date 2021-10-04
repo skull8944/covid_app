@@ -144,7 +144,7 @@ class _BlogListState extends State<BlogList> {
                             child: Stack(
                               children: <Widget>[
                                 Image.network(
-                                  'http://172.20.10.13:7414/${item.replaceAll(r'\', r'/')}',
+                                  'http://172.20.10.13:7414/' + item.replaceAll(r'\', r'/'),
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                 ),
@@ -173,16 +173,59 @@ class _BlogListState extends State<BlogList> {
                             ),
                           ),
                         ),
-                        onTap: () async {
-                          final res = await _blogService.deletePost(widget.postID);
-                          print(res);
-                          setState(() {
-                            showMore = false;
-                          });
-                          if(res == 'success') {                            
-                            widget.deletePost(widget.postID);
-                          }
-                        },
+                        onTap: () => showDialog(
+                          context: context, 
+                          builder: (BuildContext context) => AlertDialog(
+                            content: Text(
+                              '確定刪除此貼文?', 
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20
+                              ),),
+                            actions: <Widget>[
+                              InkWell(
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                  child: Text(
+                                    '確定',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      color: Colors.green
+                                    ),
+                                  )
+                                ),
+                                onTap: () async {
+                                  final res = await _blogService.deletePost(widget.postID);
+                                  print(res);
+                                  setState(() {
+                                    showMore = false;
+                                  });
+                                  if(res == 'success') {                            
+                                    widget.deletePost(widget.postID);
+                                  }
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              InkWell(
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                  child: Text(
+                                    '取消',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      color: Colors.red
+                                    ),
+                                  )
+                                ),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          )
+                        ),
                       ),
                     )
                     : Container(width: 0, height: 0,)

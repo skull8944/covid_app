@@ -33,7 +33,7 @@ class _UserProfileState extends State<UserProfile> {
   bool _showWeightEdit = false;
   bool _showSexEdit = false;
   bool _showBirthdateEdit = false;
-  Profile _profile = Profile('', '', '', '', imgUrl);
+  Profile _profile = Profile('', '', '', '', '', imgUrl);
   User _user = User('', '', '');
 
   Future<void> getImage(ImageSource source) async {

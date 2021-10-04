@@ -1,7 +1,9 @@
-import 'package:covid_app/screens/home/menu_drawer.dart';
+import 'package:covid_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:covid_app/screens/social/blogList.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:covid_app/services/blog_service.dart';
 
 class Social extends StatefulWidget {
   const Social({ Key? key }) : super(key: key);
@@ -12,6 +14,7 @@ class Social extends StatefulWidget {
 
 class _SocialState extends State<Social> {
 
+  BlogService _blogService = BlogService();
   ScrollController _scrollController = ScrollController();
   @override
   void dispose() {
@@ -27,9 +30,9 @@ class _SocialState extends State<Social> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(      
+    return Scaffold(     
       backgroundColor: Color.fromARGB(255, 236, 236, 239),      
-      body:ListView.builder(
+      body: ListView.builder(
         itemCount: 5,
         itemBuilder:(BuildContext context, int index) {
           return BlogList(

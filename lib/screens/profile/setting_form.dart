@@ -1,3 +1,4 @@
+import 'package:covid_app/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -41,32 +42,48 @@ class _SettingsFormState extends State<SettingsForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('User Profile', style: TextStyle(fontSize: 22.0),),),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          '設定資料', 
+          style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
+        ),
+        backgroundColor: Color.fromARGB(255, 246, 195, 100),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               SizedBox(height: 50.0,),
-              CircleAvatar(
-                radius: 65.0,
-                backgroundImage: file != null
-                  ? FileImage(file!)
-                  : null
+              Stack(
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 65.0,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: file != null
+                      ? FileImage(file!)
+                      : null
+                  ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: InkWell(
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: Colors.grey[850],
+                        size: 28.0,
+                      ),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: ((builder) => bottomSheet()),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: ((builder) => bottomSheet()),
-                  );
-                },
-                child: Icon(
-                  Icons.camera_alt,
-                  color: Colors.teal,
-                  size: 28.0,
-                ),
-              ),
-              SizedBox(height: 15.0,),
+              SizedBox(height: 35.0,),
               Container(
                 width: 200.0,
                 child: DropdownButtonFormField(
@@ -145,16 +162,14 @@ class _SettingsFormState extends State<SettingsForm> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(22.5),
                 child: Container(
-                  width: 120.0,
-                  height: 38.0,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.07,
+                  color: Color.fromARGB(255, 246, 195, 100),
                   child: TextButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
-                    ),
                     child: Text('Submit', 
                       style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 28.0,
+                        fontWeight: FontWeight.w600,
                         color: Colors.black
                       ),
                     ),
@@ -173,6 +188,9 @@ class _SettingsFormState extends State<SettingsForm> {
                           if(filePath != null) {
                             dynamic imgResult = await _profileService.patchImage(filePath);
                             print(imgResult);
+                            Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => Home()), (route) => false);
+                          } else {
+                            Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => Home()), (route) => false);
                           }
                         }
                       }
@@ -198,7 +216,7 @@ class _SettingsFormState extends State<SettingsForm> {
       child: Column(
         children: <Widget>[
           Text(
-            "Choose Profile photo",
+            "請選擇照片來源",
             style: TextStyle(
               fontSize: 20.0,
             ),
@@ -208,18 +226,18 @@ class _SettingsFormState extends State<SettingsForm> {
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             TextButton.icon(
-              icon: Icon(Icons.camera),
+              icon: Icon(Icons.camera, color: Colors.grey[700],),
               onPressed: () {
                 getImage(ImageSource.camera);
               },
-              label: Text("Camera"),
+              label: Text("Camera", style: TextStyle(color: Colors.grey[700], fontSize: 20),),
             ),
             TextButton.icon(
-              icon: Icon(Icons.image),
+              icon: Icon(Icons.image, color: Colors.grey[700],),
               onPressed: () {
                 getImage(ImageSource.gallery);
               },
-              label: Text("Gallery"),
+              label: Text("Gallery", style: TextStyle(color: Colors.grey[700], fontSize: 20),),
             ),
           ])
         ],

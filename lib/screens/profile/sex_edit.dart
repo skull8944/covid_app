@@ -15,7 +15,7 @@ class _SexEditState extends State<SexEdit> {
   final List<String> _sexs = ['男', '女'];
   String _sex = '男'; 
   ProfileService _profileService = ProfileService();
-  Profile profile = Profile('', '', '', '', '');
+  Profile profile = Profile('', '', '', '', '', '');
 
   void _getHeight() async {
     profile = await _profileService.getPro();

@@ -15,7 +15,7 @@ class _BirthdateEditState extends State<BirthdateEdit> {
   String birthDateInString = '';
   String birthDateError = '';
   ProfileService _profileService = ProfileService();
-  Profile profile = Profile('', '', '', '', '');
+  Profile profile = Profile('', '', '', '', '', '');
 
   void _getHeight() async {
     profile = await _profileService.getPro();

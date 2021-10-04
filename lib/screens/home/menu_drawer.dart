@@ -1,7 +1,6 @@
 import 'package:covid_app/models/profile.dart';
 import 'package:covid_app/models/user.dart';
 import 'package:covid_app/screens/auth/login.dart';
-import 'package:covid_app/screens/home/seach.dart';
 import 'package:covid_app/screens/social/mypost.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,7 +16,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
 
   static String imgUrl = 'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true';
   ProfileService _profileService = ProfileService();
-  Profile _profile = Profile('', '', '', '', imgUrl);
+  Profile _profile = Profile('', '', '', '', '', imgUrl);
   User _user = User('', '', '');
   bool circle = false;
 
@@ -31,8 +30,6 @@ class _MenuDrawerState extends State<MenuDrawer> {
         circle = false;
       });
     }
-    
-    print('drawer: ${_profile.imgUrl}');
   }
 
   void _getUser() async {
@@ -106,20 +103,20 @@ class _MenuDrawerState extends State<MenuDrawer> {
                         Ink(
                           color: Colors.grey[900],
                           child: ListTile(
-                            leading: Icon(Icons.search, size: 35.0, color: Colors.white,),
-                            title: Text('Search', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            leading: Icon(Icons.people_alt_outlined, size: 35.0, color: Colors.white,),
+                            title: Text('Friends', style: TextStyle(fontSize: 18.0, color: Colors.white)),
                             onTap: () {         
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                              //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
                             },
                           ),
                         ),
                         Ink(
                           color: Colors.grey[900],
                           child: ListTile(
-                            leading: Icon(Icons.people_alt_outlined, size: 35.0, color: Colors.white,),
-                            title: Text('Friends', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            leading: Icon(Icons.group_add_rounded, size: 35.0, color: Colors.white,),
+                            title: Text('Friend Requests', style: TextStyle(fontSize: 18.0, color: Colors.white)),
                             onTap: () {         
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                              
                             },
                           ),
                         ),

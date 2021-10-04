@@ -36,32 +36,30 @@ class ProfileService {
   }
 
   Future getProfile() async {
-    try {
-      SharedPreferences prefs =  await SharedPreferences.getInstance();
-      var name = prefs.getString('name');
-      final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/$name'));
-      if(res.statusCode == 200 || res.statusCode == 201) {
-        var result = jsonDecode(res.body);
-        print(result);
-        String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
-        Profile profile = Profile(result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
-        return profile;
-      }    
-    } catch(err) {
-      print(err);
-    }    
+    SharedPreferences prefs =  await SharedPreferences.getInstance();
+    var name = prefs.getString('name');
+    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/$name'));
+    if(res.statusCode == 200 || res.statusCode == 201) {
+      var result = jsonDecode(res.body);
+      print(result);
+      String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
+      Profile profile = Profile(name!, result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
+      return profile;
+    } else {
+      return 'no data';
+    }      
   }
   
   Future<Profile> getPro() async {
     SharedPreferences prefs =  await SharedPreferences.getInstance();
     var name = prefs.getString('name');
     final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/$name'));
-    Profile profile = Profile('','','','','');
+    Profile profile = Profile('', '','','','','');
     if(res.statusCode == 200 || res.statusCode == 201) {
       var result = jsonDecode(res.body);
       print(result);
       String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
-      profile = Profile(result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
+      profile = Profile(name!, result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
       return profile;
     } else {
       return profile;  
@@ -190,6 +188,23 @@ class ProfileService {
     } catch(err) {
       print(err);
     }
+  }
+
+  Future<List<Profile>> getUserSuggestions(String query) async {
+    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/suggestions/$query'));
+    List<Profile> suggsetions = [];
+    if(res.statusCode == 200 || res.statusCode == 201) {      
+      Map<String, dynamic> usersMap = jsonDecode(res.body);
+      print(usersMap);
+      List users = usersMap.values.toList();
+      print(users[0][0]['userName']);
+      users.forEach((e) {
+        suggsetions.add(
+          Profile(e[0]['userName'], '', '', '', '', 'http://172.20.10.13:7414/' + e[0]['headshot'].toString().replaceAll(r'\', r'/'))
+        );
+      });    
+    }    
+    return suggsetions;
   }
 
 }

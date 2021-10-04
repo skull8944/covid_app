@@ -14,7 +14,7 @@ class _WeightEditState extends State<WeightEdit> {
 
   double _weight = 70.0;
   ProfileService _profileService = ProfileService();
-  Profile profile = Profile('', '', '', '', '');
+  Profile profile = Profile('', '', '', '', '', '');
 
   void _getWeight() async {
     profile = await _profileService.getPro();

@@ -14,7 +14,7 @@ class _HeightEditState extends State<HeightEdit> {
   
   double _height = 160.0;
   ProfileService _profileService = ProfileService();
-  Profile profile = Profile('', '', '', '', '');
+  Profile profile = Profile('', '', '', '', '', '');
 
   void _getHeight() async {
     profile = await _profileService.getPro();

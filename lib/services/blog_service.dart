@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:covid_app/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:covid_app/models/blog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,4 +74,28 @@ class BlogService {
     final res = await http.delete(Uri.parse('http://172.20.10.13:7414/myblog/$postID'));
     return res.body;
   }
+
+  Future<List<Blog>> getPost(String userName) async {
+    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/myblog/$userName'));
+    List<Blog> myBlogList = [];
+    if(res.statusCode == 200 || res.statusCode == 201) {
+      List result = jsonDecode(res.body);
+      result.forEach((e) {
+        myBlogList.add(
+          Blog(
+            e['_id'], 
+            e['userName'], 
+            e['images'], 
+            e['distance'], 
+            e['time'], 
+            e['created_at'], 
+            e['collect'] == 'true'
+          )
+        );
+        print(myBlogList[0].images[0]);
+      });
+    }
+    return myBlogList;
+  }
+
 }
