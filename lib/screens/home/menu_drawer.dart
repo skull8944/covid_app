@@ -1,6 +1,8 @@
 import 'package:covid_app/models/profile.dart';
 import 'package:covid_app/models/user.dart';
 import 'package:covid_app/screens/auth/login.dart';
+import 'package:covid_app/screens/social/friend_list.dart';
+import 'package:covid_app/screens/social/friend_requests.dart';
 import 'package:covid_app/screens/social/mypost.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -106,7 +108,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             leading: Icon(Icons.people_alt_outlined, size: 35.0, color: Colors.white,),
                             title: Text('Friends', style: TextStyle(fontSize: 18.0, color: Colors.white)),
                             onTap: () {         
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) =>FriendList()));
                             },
                           ),
                         ),
@@ -116,7 +118,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             leading: Icon(Icons.group_add_rounded, size: 35.0, color: Colors.white,),
                             title: Text('Friend Requests', style: TextStyle(fontSize: 18.0, color: Colors.white)),
                             onTap: () {         
-                              
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => FriendRequest()));
                             },
                           ),
                         ),

@@ -1,6 +1,7 @@
 import 'package:covid_app/models/profile.dart';
 import 'package:covid_app/screens/home/menu_drawer.dart';
 import 'package:covid_app/screens/profile/setting_form.dart';
+import 'package:covid_app/screens/social/mypost.dart';
 import 'package:covid_app/screens/social/personal_page.dart';
 import 'package:covid_app/services/profile_service.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:covid_app/screens/diet/diet.dart';
 import 'package:covid_app/screens/covid/covid.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({ Key? key }) : super(key: key);
@@ -20,6 +22,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  String myName = '';
   bool _search = false;
   int screenIndex = 0;
   final screens = [Social(), Running(), Diet(), Covid()];
@@ -49,9 +52,19 @@ class _HomeState extends State<Home> {
     }
   }
 
+  void getMyName() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    String? name = _prefs.getString('name');
+    setState(() {
+      myName = name!;
+    });
+    print(myName);
+  }
+
   @override
   void initState() {
     super.initState();
+    getMyName();
     checkProfile();
   }
 
@@ -83,7 +96,10 @@ class _HomeState extends State<Home> {
                       final user = suggestions;
                       Navigator.push(
                         context, 
-                        MaterialPageRoute(builder: (context) => PersonalPage(userName: user.name, imgUrl: user.imgUrl,))
+                        MaterialPageRoute(builder: (context) => 
+                        user.name == myName
+                        ? MyPost()
+                        : PersonalPage(userName: user.name, imgUrl: user.imgUrl,))
                       );
                     },
                     itemBuilder: (context, Profile suggestions) {

@@ -1,6 +1,8 @@
 import 'package:covid_app/models/blog.dart';
 import 'package:covid_app/services/blog_service.dart';
+import 'package:covid_app/services/friend_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import 'blogList.dart';
 
@@ -15,10 +17,14 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
 
+  FriendService _friendService = FriendService();
   BlogService _blogService = BlogService();
   List<Blog> myBlogList = [];
-  bool circle = false;
+  bool circle = true;
+  bool statusCircle = true;
   int postLength = 0;
+  int friendStatus = 0;
+  List friendStatusList = ['加好友', '申請中', {'確認', '取消'}, '好友'];
 
   void getPostList() async {
     setState(() {
@@ -36,9 +42,22 @@ class _PersonalPageState extends State<PersonalPage> {
     });
   }
 
+  void getFriendStatus() async {
+   setState(() {
+     statusCircle = true;
+   });
+   int fstatus = await _friendService.getFriendStatus(widget.userName);
+   print(fstatus);
+   setState(() {
+     friendStatus = fstatus;
+     statusCircle = false;
+   });
+  }
+
   @override
   void initState() {    
     super.initState();
+    getFriendStatus();
     getPostList();
   }
   
@@ -66,26 +85,120 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ],
                 )
-              ),                    
-              InkWell(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(35),
-                  child: Container(
-                    color: Colors.grey,
-                    width: 80,
-                    height: 35,
-                    child: Center(
-                      child: Text(
-                        'add freind',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600
+              ),     
+              statusCircle
+              ? CircularProgressIndicator()               
+              : friendStatus == 2
+                ? Row(
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(35),
+                      child: Container(
+                        width: 65,
+                        color: Color.fromARGB(255, 246, 195, 100),
+                        padding: EdgeInsets.all(5),
+                        child: InkWell(
+                          child: Center(child: Text('接受')),
+                          onTap: () async {
+                            setState(() {
+                              statusCircle = true;
+                            });
+                            dynamic result = await _friendService.acceptRequest(widget.userName);
+                            if(result == 'success') {
+                              setState(() {
+                                friendStatus = 3;
+                                statusCircle = false;
+                              });
+                            }
+                          },
                         ),
-                      )
+                      ),
                     ),
-                  )
-                ),
-              )
+                    SizedBox(width: 5,),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(35),
+                      child: Container(
+                        width: 65,
+                        color: Color.fromARGB(255, 149, 148, 149),
+                        padding: EdgeInsets.all(5),
+                        child: InkWell(
+                          child: Center(child: Text('拒絕')),
+                          onTap: () async {
+                            setState(() {
+                              statusCircle = true;
+                            });
+                            dynamic result = await _friendService.rejectRequest(widget.userName);
+                            if(result == 'success') {
+                              setState(() {
+                                friendStatus = 0;
+                                statusCircle = false;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                )
+                : InkWell(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(35),
+                    child: Container(
+                      color: Colors.grey,
+                      width: 80,
+                      height: 35,
+                      child: Center(
+                        child: Text(
+                          friendStatusList[friendStatus],
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600
+                          ),
+                        )
+                      ),
+                    )
+                  ),
+                  onTap: () async {
+                    switch (friendStatus) {
+                      case 0:
+                        print('add');
+                        setState(() {
+                          statusCircle = true;
+                        });
+                        dynamic result = await _friendService.addFriend(widget.userName);
+                        print(result);
+                        if(result == 'success') {
+                          setState(() {
+                            friendStatus = 1;
+                            statusCircle = false;
+                          });
+                          print('status： '+friendStatus.toString());
+                        }
+                        break;
+                      case 1:
+                        print('reject');
+                        setState(() {
+                          statusCircle = true;
+                        });
+                        dynamic result = await _friendService.rejectRequest(widget.userName);
+                        print(result);
+                        if(result == 'success') {
+                          setState(() {
+                            friendStatus = 0;
+                            statusCircle = false;
+                          });
+                          print('status： '+friendStatus.toString());
+                        }
+                        break;
+                      case 3:
+                        print('friend');
+                        break; 
+                      default:
+                        print('default');
+                        break;
+                    }                  
+                  },
+                )
           ],
         ),
         /*Text(
@@ -106,7 +219,18 @@ class _PersonalPageState extends State<PersonalPage> {
              
               Expanded(
                 child: myBlogList.length == 0
-                  ? Text('No Post Yet')
+                  ? Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: Text(
+                        'No Post Yet',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20
+                        ),
+                      )
+                    )
+                  )
                   : ListView.builder(
                   itemCount: postLength,
                   itemBuilder: (BuildContext context, int i) {

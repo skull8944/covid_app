@@ -23,7 +23,7 @@ class _WrapperState extends State<Wrapper> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? token = _prefs.getString('name');
     String? name = _prefs.getString('token');
-    if(token!.isNotEmpty && token != '' && name!.isNotEmpty && name != '') {
+    if(token != null && token != '' && name != null && name != '') {
       setState(() {
         _hasUser = true;
         setState(() {

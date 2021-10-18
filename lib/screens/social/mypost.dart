@@ -43,7 +43,7 @@ class _MyPostState extends State<MyPost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  Color.fromARGB(255, 236, 236, 239),
+      backgroundColor: Color.fromARGB(255, 236, 236, 239),
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.grey[850]),
