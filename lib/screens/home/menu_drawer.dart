@@ -1,6 +1,7 @@
 import 'package:covid_app/models/profile.dart';
 import 'package:covid_app/models/user.dart';
 import 'package:covid_app/screens/auth/login.dart';
+import 'package:covid_app/screens/social/favorites.dart';
 import 'package:covid_app/screens/social/friend_list.dart';
 import 'package:covid_app/screens/social/friend_requests.dart';
 import 'package:covid_app/screens/social/mypost.dart';
@@ -128,7 +129,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                             leading: Icon(Icons.turned_in_not_outlined, size: 35.0, color: Colors.white,),
                             title: Text('Favorites', style: TextStyle(fontSize: 18.0, color: Colors.white)),
                             onTap: () {         
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Favorites()));
                             },
                           ),
                         ),

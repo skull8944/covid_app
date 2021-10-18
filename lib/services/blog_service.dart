@@ -98,4 +98,70 @@ class BlogService {
     return myBlogList;
   }
 
+  Future<List<Blog>> getFriendPost() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final userName = _prefs.getString('name');
+    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/blog/$userName'));
+    List<Blog> friendBlogList = [];
+    if(res.statusCode == 200 || res.statusCode == 201) {
+      List result = jsonDecode(res.body);
+      result.forEach((e) {
+        friendBlogList.add(
+          Blog(
+            e['_id'], 
+            e['userName'], 
+            e['images'], 
+            e['distance'], 
+            e['time'], 
+            e['created_at'], 
+            e['collect'] == 'true'
+          )
+        );
+      });
+    }
+    return friendBlogList;
+  }  
+  
+  Future collect(String postID, bool collect) async {
+    try {
+      final res = await http.post(Uri.parse('http://172.20.10.13:7414/blog/collect/$postID'),
+      headers: <String, String>{
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: jsonEncode(<String, String>{
+          'collect': collect.toString(),
+        })
+      );
+      if(res.statusCode == 200 || res.statusCode == 201) {
+        return 'success';
+      }
+    } catch(err) {
+      return 'fail';
+    }
+  }
+
+  Future<List<Blog>> getFavoritePost() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final userName = _prefs.getString('name');
+    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/blog/favorite/$userName'));
+    List<Blog> favoriteBlogList = [];
+    if(res.statusCode == 200 || res.statusCode == 201) {
+      List result = jsonDecode(res.body);
+      result.forEach((e) {
+        favoriteBlogList.add(
+          Blog(
+            e['_id'], 
+            e['userName'], 
+            e['images'], 
+            e['distance'], 
+            e['time'], 
+            e['created_at'], 
+            e['collect'] == 'true'
+          )
+        );
+      });
+    }
+    return favoriteBlogList;
+  }  
+
 }

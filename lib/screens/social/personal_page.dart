@@ -241,6 +241,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       imgUrls: myBlogList[i].images,
                       time: myBlogList[i].time,
                       distance: myBlogList[i].distance,
+                      collect: myBlogList[i].collect,
                       deletePost: (String postID) {
                         myBlogList.removeWhere((item) => item.postID == postID);
                         setState(() {

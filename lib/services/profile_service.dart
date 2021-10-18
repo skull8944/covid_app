@@ -12,7 +12,6 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      print(name);
       final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
@@ -25,7 +24,6 @@ class ProfileService {
         }));
 
       if(res.statusCode == 200 || res.statusCode == 201) {
-        print(jsonDecode(res.body));
         return (jsonDecode(res.body));
       } else {
         return ('error');
@@ -41,7 +39,6 @@ class ProfileService {
     final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/$name'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       var result = jsonDecode(res.body);
-      print(result);
       String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
       Profile profile = Profile(name!, result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
       return profile;
@@ -57,9 +54,21 @@ class ProfileService {
     Profile profile = Profile('', '','','','','');
     if(res.statusCode == 200 || res.statusCode == 201) {
       var result = jsonDecode(res.body);
-      print(result);
       String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
       profile = Profile(name!, result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
+      return profile;
+    } else {
+      return profile;  
+    }  
+  }
+
+  Future<Profile> getFriendPro(String name) async {
+    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/$name'));
+    Profile profile = Profile('', '','','','','');
+    if(res.statusCode == 200 || res.statusCode == 201) {
+      var result = jsonDecode(res.body);
+      String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
+      profile = Profile(name, result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
       return profile;
     } else {
       return profile;  
@@ -98,7 +107,6 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      print(name);
       final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/height_edit/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
@@ -108,7 +116,6 @@ class ProfileService {
         }));
 
       if(res.statusCode == 200 || res.statusCode == 201) {
-        print(jsonDecode(res.body));
         return (jsonDecode(res.body));
       } else {
         return ('error');
@@ -122,7 +129,6 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      print(name);
       final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/weight_edit/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
@@ -132,7 +138,6 @@ class ProfileService {
         }));
 
       if(res.statusCode == 200 || res.statusCode == 201) {
-        print(jsonDecode(res.body));
         return (jsonDecode(res.body));
       } else {
         return ('error');
@@ -146,7 +151,6 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      print(name);
       final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/sex_edit/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
@@ -156,7 +160,6 @@ class ProfileService {
         }));
 
       if(res.statusCode == 200 || res.statusCode == 201) {
-        print(jsonDecode(res.body));
         return (jsonDecode(res.body));
       } else {
         return ('error');
@@ -170,7 +173,6 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      print(name);
       final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/birthdate_edit/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
@@ -180,7 +182,6 @@ class ProfileService {
         }));
 
       if(res.statusCode == 200 || res.statusCode == 201) {
-        print(jsonDecode(res.body));
         return (jsonDecode(res.body));
       } else {
         return ('error');
@@ -195,9 +196,7 @@ class ProfileService {
     List<Profile> suggsetions = [];
     if(res.statusCode == 200 || res.statusCode == 201) {      
       Map<String, dynamic> usersMap = jsonDecode(res.body);
-      print(usersMap);
       List users = usersMap.values.toList();
-      print(users[0][0]['userName']);
       users.forEach((e) {
         suggsetions.add(
           Profile(e[0]['userName'], '', '', '', '', 'http://172.20.10.13:7414/' + e[0]['headshot'].toString().replaceAll(r'\', r'/'))

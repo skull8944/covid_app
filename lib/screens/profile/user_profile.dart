@@ -80,148 +80,178 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.grey[700]),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: circle
-            ? CircularProgressIndicator()
-            : Column(
-              children: [
-                SizedBox(height: 15.0,),
-                Container(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 56.0,
-                        backgroundColor: Colors.grey[500],
-                        backgroundImage: NetworkImage(_profile.imgUrl)
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 0,
+                  top: MediaQuery.of(context).size.height * 0.04,
+                  bottom: MediaQuery.of(context).size.height * 0.02
+                ),
+                child: InkWell(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(35),
+                      bottomRight: Radius.circular(35)
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(14),
+                      color: Colors.grey[800],
+                      child: Text(
+                        '<  Profile  ',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600
+                        ),
                       ),
-                      Positioned(
-                        left: 60.0,
-                        top:  70.0,
-                        child: ElevatedButton(
-                          child: Icon(Icons.camera_alt),
-                          onPressed: () {  
-                            showModalBottomSheet(
-                              context: context,
-                              builder: ((builder) => bottomSheet()),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
-                            primary: Colors.grey[800],
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              circle
+              ? CircularProgressIndicator()
+              : Column(
+                children: [
+                  SizedBox(height: 15.0,),
+                  Container(
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 56.0,
+                          backgroundColor: Colors.grey[500],
+                          backgroundImage: NetworkImage(_profile.imgUrl)
+                        ),
+                        Positioned(
+                          left: 60.0,
+                          top:  70.0,
+                          child: ElevatedButton(
+                            child: Icon(Icons.camera_alt),
+                            onPressed: () {  
+                              showModalBottomSheet(
+                                context: context,
+                                builder: ((builder) => bottomSheet()),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(),
+                              primary: Colors.grey[800],
+                            ),
+                          )
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10.0,),
+                  Text(_user.name, style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w500),),
+                  Text(_user.email, style: TextStyle(fontSize: 18.0)),
+                  SizedBox(height: 45.0,),
+                  ListTile(
+                    leading: Text('身高:', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('${_profile.height} ', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                        Container(
+                          width: 25.0,
+                          child: TextButton(
+                            child: _showHeightEdit ? Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 30.0,)
+                              :Icon(Icons.keyboard_arrow_right_rounded, color: Colors.white, size: 30.0,),
+                            onPressed:() {
+                              setState(() {
+                                _showHeightEdit = !_showHeightEdit;
+                              });
+                            } 
                           ),
                         )
-                      )
-                    ],
+                    ],),
+                    tileColor: Colors.grey[500],
                   ),
-                ),
-                SizedBox(height: 10.0,),
-                Text(_user.name, style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w500),),
-                Text(_user.email, style: TextStyle(fontSize: 18.0)),
-                SizedBox(height: 45.0,),
-                ListTile(
-                  leading: Text('身高:', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('${_profile.height} ', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                      Container(
-                        width: 25.0,
-                        child: TextButton(
-                          child: _showHeightEdit ? Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 30.0,)
-                            :Icon(Icons.keyboard_arrow_right_rounded, color: Colors.white, size: 30.0,),
-                          onPressed:() {
-                            setState(() {
-                              _showHeightEdit = !_showHeightEdit;
-                            });
-                          } 
-                        ),
-                      )
-                  ],),
-                  tileColor: Colors.grey[500],
-                ),
-                _showHeightEdit == false
-                ? SizedBox() 
-                : HeightEdit( notifyParent: () { _getProfile(); },),
-                ListTile(
-                  leading: Text('體重:', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('${_profile.weight} ', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                      Container(
-                        width: 25.0,
-                        child: TextButton(
-                          child: _showWeightEdit ? Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 30.0,)
-                            :Icon(Icons.keyboard_arrow_right_rounded, color: Colors.white, size: 30.0,),
-                          onPressed:() {
-                            setState(() {
-                              _showWeightEdit = !_showWeightEdit;
-                            });
-                          } 
-                        ),
-                      )
-                  ],),
-                  tileColor: Colors.grey[500],
-                ),
-                _showWeightEdit == false
-                ? SizedBox() 
-                : WeightEdit( notifyParent: () { _getProfile(); },),
-                ListTile(
-                  leading: Text('性別:', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('${_profile.sex} ', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                      Container(
-                        width: 25.0,
-                        child: TextButton(
-                          child: _showSexEdit ? Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 30.0,)
-                            :Icon(Icons.keyboard_arrow_right_rounded, color: Colors.white, size: 30.0,),
-                          onPressed:() {
-                            setState(() {
-                              _showSexEdit = !_showSexEdit;
-                            });
-                          } 
-                        ),
-                      )
-                  ],),
-                  tileColor: Colors.grey[500],
-                ),
-                _showSexEdit == false
-                ? SizedBox() 
-                : SexEdit( notifyParent: () { _getProfile(); },),
-                ListTile(
-                  leading: Text('生日:', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('${_profile.birthdate} ', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                      Container(
-                        width: 25.0,
-                        child: TextButton(
-                          child: _showBirthdateEdit ? Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 30.0,)
-                            :Icon(Icons.keyboard_arrow_right_rounded, color: Colors.white, size: 30.0,),
-                          onPressed:() {
-                            setState(() {
-                              _showBirthdateEdit = !_showBirthdateEdit;
-                            });
-                          } 
-                        ),
-                      )
-                  ],),
-                  tileColor: Colors.grey[500],
-                ),
-                _showBirthdateEdit == false
-                ? SizedBox() 
-                : BirthdateEdit( notifyParent: () { _getProfile(); }, ),
-              ],
-            )
+                  _showHeightEdit == false
+                  ? SizedBox() 
+                  : HeightEdit( notifyParent: () { _getProfile(); },),
+                  ListTile(
+                    leading: Text('體重:', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('${_profile.weight} ', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                        Container(
+                          width: 25.0,
+                          child: TextButton(
+                            child: _showWeightEdit ? Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 30.0,)
+                              :Icon(Icons.keyboard_arrow_right_rounded, color: Colors.white, size: 30.0,),
+                            onPressed:() {
+                              setState(() {
+                                _showWeightEdit = !_showWeightEdit;
+                              });
+                            } 
+                          ),
+                        )
+                    ],),
+                    tileColor: Colors.grey[500],
+                  ),
+                  _showWeightEdit == false
+                  ? SizedBox() 
+                  : WeightEdit( notifyParent: () { _getProfile(); },),
+                  ListTile(
+                    leading: Text('性別:', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('${_profile.sex} ', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                        Container(
+                          width: 25.0,
+                          child: TextButton(
+                            child: _showSexEdit ? Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 30.0,)
+                              :Icon(Icons.keyboard_arrow_right_rounded, color: Colors.white, size: 30.0,),
+                            onPressed:() {
+                              setState(() {
+                                _showSexEdit = !_showSexEdit;
+                              });
+                            } 
+                          ),
+                        )
+                    ],),
+                    tileColor: Colors.grey[500],
+                  ),
+                  _showSexEdit == false
+                  ? SizedBox() 
+                  : SexEdit( notifyParent: () { _getProfile(); },),
+                  ListTile(
+                    leading: Text('生日:', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('${_profile.birthdate} ', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                        Container(
+                          width: 25.0,
+                          child: TextButton(
+                            child: _showBirthdateEdit ? Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 30.0,)
+                              :Icon(Icons.keyboard_arrow_right_rounded, color: Colors.white, size: 30.0,),
+                            onPressed:() {
+                              setState(() {
+                                _showBirthdateEdit = !_showBirthdateEdit;
+                              });
+                            } 
+                          ),
+                        )
+                    ],),
+                    tileColor: Colors.grey[500],
+                  ),
+                  _showBirthdateEdit == false
+                  ? SizedBox() 
+                  : BirthdateEdit( notifyParent: () { _getProfile(); }, ),
+                ],
+              )
+            ]
+          ),
         ),
       ),
     );

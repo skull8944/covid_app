@@ -12,8 +12,10 @@ class BlogList extends StatefulWidget {
   final List imgUrls;
   final String distance;
   final String time;
+  final bool collect;
   final Function deletePost;
-  const BlogList({ 
+
+  BlogList({ 
     Key? key, 
     required this.postID, 
     required this.userName, 
@@ -21,7 +23,8 @@ class BlogList extends StatefulWidget {
     required this.imgUrls, 
     required this.distance, 
     required this.time,
-    required this.deletePost ,lete
+    required this.deletePost,
+    required this.collect
   }) : super(key: key);
 
   @override
@@ -35,6 +38,7 @@ class _BlogListState extends State<BlogList> {
   String imgUrl = '';
   ProfileService _profileService = ProfileService();
   BlogService _blogService = BlogService();
+  bool collectState = false;
 
   void getMyName()  async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -46,12 +50,15 @@ class _BlogListState extends State<BlogList> {
   @override
   void initState() {    
     super.initState();
+    setState(() {
+      collectState = widget.collect;
+    });
     getMyName();
     _getImgUrl();
   }
 
   void _getImgUrl() async {
-    final res = await _profileService.getPro();
+    final res = await _profileService.getFriendPro(widget.userName);
     if(mounted) {
       setState(() {
         imgUrl = res.imgUrl;
@@ -78,7 +85,7 @@ class _BlogListState extends State<BlogList> {
                   leading: InkWell(
                     child: CircleAvatar(
                       backgroundColor: Colors.grey,
-                      backgroundImage: NetworkImage('$imgUrl'),
+                      backgroundImage: NetworkImage(imgUrl),
                     ),
                     onTap: () {
                       
@@ -103,11 +110,10 @@ class _BlogListState extends State<BlogList> {
                       ),
                     ],
                   ),
-                  trailing: InkWell(
+                  trailing: myName == widget.userName
+                  ? InkWell(
                     child: Icon(
-                      myName == widget.userName
-                      ? Icons.more_vert_rounded
-                      : Icons.turned_in_not_outlined,
+                      Icons.more_vert_rounded,
                       color: Colors.grey[700], size: 35.0,
                     ),
                     onTap: () async {
@@ -115,7 +121,23 @@ class _BlogListState extends State<BlogList> {
                         showMore = !showMore;
                       });
                     },
-                  ),
+                  )
+                  : InkWell(
+                    child: Icon(
+                      collectState
+                      ? Icons.turned_in_outlined
+                      : Icons.turned_in_not_rounded,
+                      color: Colors.grey[700], size: 35.0,
+                    ),
+                    onTap: () async {
+                      dynamic result = await _blogService.collect(widget.postID, !collectState);
+                      if(result == 'success') {
+                        setState(() {
+                          collectState = !collectState;
+                        });
+                      }
+                    },
+                  )
                 ),
               ),
               Stack(
