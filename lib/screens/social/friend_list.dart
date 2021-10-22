@@ -1,5 +1,7 @@
+import 'package:covid_app/models/profile.dart';
 import 'package:covid_app/screens/social/personal_page.dart';
 import 'package:covid_app/services/friend_service.dart';
+import 'package:covid_app/services/profile_service.dart';
 import 'package:flutter/material.dart';
 
 class FriendList extends StatefulWidget {
@@ -12,12 +14,22 @@ class FriendList extends StatefulWidget {
 class _FriendListState extends State<FriendList> {
 
   FriendService _friendService = FriendService();
+  ProfileService _profileService = ProfileService();
   List friends = [];
   int friendsLength = 0;
+  List imgUrls = [];
+  String imgUrl = 'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true';
 
   void getFriends() async {
     List friendList = await _friendService.getFriends();
+    print(friendList);
     if(friendList.length > 0) {
+      for(var i = 0; i < friendList.length; i++) {
+        Profile result = await _profileService.getFriendPro(friendList[i]['requester']);
+        if(result.imgUrl != null && result.imgUrl != '' ) {
+          imgUrls.add(result.imgUrl);
+        }
+      }
       setState(() {
         friends = friendList;
         friendsLength = friendList.length;
@@ -116,7 +128,8 @@ class _FriendListState extends State<FriendList> {
                               Padding(
                                 padding: EdgeInsets.all(3.0),
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.black,
+                                  backgroundColor: Colors.grey,
+                                  backgroundImage: NetworkImage(imgUrls[index]),
                                 ),
                               ),
                               Padding(
@@ -156,15 +169,58 @@ class _FriendListState extends State<FriendList> {
                                   child: Icon(
                                     Icons.delete_rounded, color: Colors.grey[700], size: 28,
                                   ),
-                                  onTap: () async {
-                                    dynamic result = await _friendService.rejectRequest(friends[index]['requester']);
-                                    if(result == 'success') {
-                                      friends.removeAt(index);
-                                      setState(() {
-                                        friendsLength--;
-                                      });
-                                    }
-                                  },
+                                  onTap: () => showDialog(
+                                    context: context, 
+                                    builder: (BuildContext context) => AlertDialog(
+                                      content: Text(
+                                        '確定刪除好友?', 
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20
+                                        ),),
+                                      actions: <Widget> [
+                                        InkWell(
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                            child: Text(
+                                              '確定',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                                color: Colors.green
+                                              ),
+                                            )
+                                          ),
+                                          onTap: () async {
+                                            dynamic result = await _friendService.rejectRequest(friends[index]['requester']);
+                                            if(result == 'success') {
+                                              friends.removeAt(index);
+                                              setState(() {
+                                                friendsLength--;
+                                              });
+                                            }                                    
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                        InkWell(
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                            child: Text(
+                                              '取消',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                                color: Colors.red
+                                              ),
+                                            )
+                                          ),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                        )
+                                      ]
+                                    )                                    
+                                  )
                                 ),
                               ),
                             ],

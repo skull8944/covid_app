@@ -191,7 +191,54 @@ class _PersonalPageState extends State<PersonalPage> {
                         }
                         break;
                       case 3:
-                        print('friend');
+                        showDialog(
+                          context: context, 
+                          builder: (BuildContext context) => AlertDialog(
+                            content: Text(
+                              '確定取消好友關係?', 
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20
+                              ),),
+                            actions: <Widget> [
+                              InkWell(
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                  child: Text(
+                                    '確定',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      color: Colors.green
+                                    ),
+                                  )
+                                ),
+                                onTap: () async {
+                                  dynamic result = await _friendService.rejectRequest(widget.userName);
+                                  if(result == 'success') {
+                                    Navigator.pop(context);
+                                  }
+                                },
+                              ),
+                              InkWell(
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                  child: Text(
+                                    '取消',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      color: Colors.red
+                                    ),
+                                  )
+                                ),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ]
+                          )                                    
+                        );
                         break; 
                       default:
                         print('default');
