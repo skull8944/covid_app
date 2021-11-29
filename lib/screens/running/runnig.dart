@@ -36,36 +36,27 @@ class _RunningState extends State<Running> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.1,
-                            right: MediaQuery.of(context).size.width * 0.1,
-                            top: MediaQuery.of(context).size.height * 0.017
+                            left: MediaQuery.of(context).size.width * 0.2,
+                            right: MediaQuery.of(context).size.width * 0.2,
+                            top: 40
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               InkWell(
-                                child: Icon(Icons.directions_run_rounded, size: 50, color: Colors.white,),
+                                child: Image.asset('assets/img/run_run.png', scale: 5,),
                                 onTap: () {
                                   setState(() {
                                     childPage = 0;
                                   });
                                 },
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.07),
-                                child: InkWell(
-                                  child: Icon(Icons.paste_rounded, size: 50, color: Colors.white,),
-                                  onTap: () {
-                                    setState(() {
-                                      childPage = 1;
-                                    });
-                                  },
-                                ),
-                              ),
                               InkWell(
-                                child: Icon(Icons.turned_in_rounded, size: 50, color: Colors.white,),
+                                child: Image.asset('assets/img/run_record.png', scale: 5,),
                                 onTap: () {
-                                  
+                                  setState(() {
+                                    childPage = 1;
+                                  });                                  
                                 },
                               ),
                             ],
