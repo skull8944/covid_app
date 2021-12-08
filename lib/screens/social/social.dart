@@ -22,7 +22,9 @@ class _SocialState extends State<Social> {
     setState(() {
       circle = true;
     });
+
    List<Blog> friendPostList = await _blogService.getFriendPost();
+   
    if(friendPostList.length > 0) {
      setState(() {
        friendPost = friendPostList;
@@ -32,11 +34,17 @@ class _SocialState extends State<Social> {
    }
   }
 
-  List<String> imgUrls = [
-    'blogPhotos/61485a3737762103d8d8348820219202221mountain-landscape-1024x883.jpg.jpg',
-    'blogPhotos/61485a3737762103d8d8348820219202221vector-mountain-sunset-landscape-first-person-view.webp.jpg',
-    'blogPhotos/6148991cea590948601a27a620219202222nature-scene-with-river-hills-forest-mountain-landscape-flat-cartoon-style-illustration_1150-37326.jpg.jpg',
-  ];
+  Future<void> refreshPost() async {
+    List<Blog> friendPostList = await _blogService.getFriendPost();
+    
+    if(friendPostList.length > 0) {
+      friendPost.clear();
+      setState(() {
+        friendPost = friendPostList;
+        postLength = friendPost.length;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -49,9 +57,11 @@ class _SocialState extends State<Social> {
     return Scaffold(     
       backgroundColor: Color.fromARGB(255, 236, 236, 239),      
       body: circle
-      ? CircularProgressIndicator()
+      ? Center(child: CircularProgressIndicator())
       : postLength > 0
-        ? ListView.builder(
+        ? RefreshIndicator(
+          onRefresh: refreshPost,
+          child: ListView.builder(
             itemCount: postLength,
             itemBuilder:(BuildContext context, int i) {
               return BlogList(
@@ -67,7 +77,8 @@ class _SocialState extends State<Social> {
                 },
               );
             }          
-          )
+          ),
+        )
         : Container(
           height: MediaQuery.of(context).size.height * 0.7,
           child: Center(
