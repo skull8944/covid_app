@@ -63,15 +63,7 @@ class _RunningRecordState extends State<RunningRecord> {
                     actionPane: SlidableDrawerActionPane(),
                     actions: <Widget>[
                       IconSlideAction(
-                        caption: 'Archive',
-                        color: Colors.blue,
-                        icon: Icons.archive,
-                        onTap: () => {
-                          
-                        },
-                      ),
-                      IconSlideAction(
-                        caption: 'Share',
+                        caption: '分享',
                         color: Colors.indigo,
                         icon: Icons.share,
                         onTap: () => {
@@ -91,7 +83,7 @@ class _RunningRecordState extends State<RunningRecord> {
                     ],
                     secondaryActions: <Widget>[
                       IconSlideAction(
-                        caption: 'More',
+                        caption: '地圖',
                         color: Colors.black45,
                         icon: Icons.more_horiz,
                         onTap: () {
@@ -99,7 +91,7 @@ class _RunningRecordState extends State<RunningRecord> {
                         },
                       ),
                       IconSlideAction(
-                        caption: 'Delete',
+                        caption: '刪除',
                         color: Colors.red,
                         icon: Icons.delete,
                         onTap: () {
@@ -116,7 +108,7 @@ class _RunningRecordState extends State<RunningRecord> {
                             child: Column(
                               children: [
                                 Text('13m', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
-                                Text('Distance', style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),),
+                                Text('距離', style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),),
                               ],
                             )
                           ),
@@ -131,7 +123,7 @@ class _RunningRecordState extends State<RunningRecord> {
                           child: Column(
                             children: [
                               Text('06:12', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
-                              Text('Pace', style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),),
+                              Text('時間', style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),),
                             ],
                           )
                         ),
@@ -145,7 +137,7 @@ class _RunningRecordState extends State<RunningRecord> {
                           child: Column(
                             children: [
                               Text('132', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
-                              Text('Calories', style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),),
+                              Text('卡路里', style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),),
                             ],
                           )
                         ),

@@ -67,7 +67,7 @@ class _FriendListState extends State<FriendList> {
                     padding: EdgeInsets.all(14),
                     color: Colors.grey[800],
                     child: Text(
-                      '<  Friends  ',
+                      '<  朋友  ',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -86,7 +86,7 @@ class _FriendListState extends State<FriendList> {
               height: MediaQuery.of(context).size.height * 0.7,
               child: Center(
                 child: Text(
-                  'No Friends',
+                  '還沒有朋友',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600

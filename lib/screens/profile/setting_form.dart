@@ -166,7 +166,8 @@ class _SettingsFormState extends State<SettingsForm> {
                   height: MediaQuery.of(context).size.height * 0.07,
                   color: Color.fromARGB(255, 246, 195, 100),
                   child: TextButton(
-                    child: Text('Submit', 
+                    child: Text(
+                      '更改', 
                       style: TextStyle(
                         fontSize: 28.0,
                         fontWeight: FontWeight.w600,

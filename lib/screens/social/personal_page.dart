@@ -42,6 +42,18 @@ class _PersonalPageState extends State<PersonalPage> {
     });
   }
 
+  Future<void> refreshPost() async {
+    List<Blog> friendPostList = await _blogService.getPost(widget.userName);
+    
+    if(friendPostList.length > 0) {
+      setState(() {
+        myBlogList.clear();
+        myBlogList = friendPostList;
+        postLength = myBlogList.length;
+      });
+    }
+  }
+
   void getFriendStatus() async {
    setState(() {
      statusCircle = true;
@@ -270,7 +282,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     height: MediaQuery.of(context).size.height,
                     child: Center(
                       child: Text(
-                        'No Post Yet',
+                        '還沒有貼文',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 20
@@ -278,26 +290,29 @@ class _PersonalPageState extends State<PersonalPage> {
                       )
                     )
                   )
-                  : ListView.builder(
-                  itemCount: postLength,
-                  itemBuilder: (BuildContext context, int i) {
-                    return BlogList(
-                      postID: myBlogList[i].postID,
-                      userName: myBlogList[i].userName, 
-                      date: myBlogList[i].updatedTime,
-                      imgUrls: myBlogList[i].images,
-                      time: myBlogList[i].time,
-                      distance: myBlogList[i].distance,
-                      collect: myBlogList[i].collect,
-                      deletePost: (String postID) {
-                        myBlogList.removeWhere((item) => item.postID == postID);
-                        setState(() {
-                          postLength--;
-                        });
-                      },
-                    );
-                  }          
-                ),
+                  : RefreshIndicator(
+                    onRefresh: refreshPost,
+                    child: ListView.builder(
+                    itemCount: postLength,
+                    itemBuilder: (BuildContext context, int i) {
+                      return BlogList(
+                        postID: myBlogList[i].postID,
+                        userName: myBlogList[i].userName, 
+                        date: myBlogList[i].updatedTime,
+                        imgUrls: myBlogList[i].images,
+                        time: myBlogList[i].time,
+                        distance: myBlogList[i].distance,
+                        collect: myBlogList[i].collect,
+                        deletePost: (String postID) {
+                          myBlogList.removeWhere((item) => item.postID == postID);
+                          setState(() {
+                            postLength--;
+                          });
+                        },
+                      );
+                    }          
+                                  ),
+                  ),
               )                
             ],
           ),

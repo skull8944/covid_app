@@ -40,11 +40,7 @@ class _SignUpState extends State<SignUp> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CircleAvatar(
-                        radius: 60.0,
-                        backgroundColor: Colors.white,
-                        child: Center(child: Text('logo'),),
-                      ),
+                      Image.asset('./assets/img/logo.png',scale: 19,),
                     ],
                   ),
                 ),    
@@ -206,7 +202,7 @@ class _SignUpState extends State<SignUp> {
                             });
                           },
                           decoration: InputDecoration(
-                              hintText: 'Password',
+                              hintText: '密碼',
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
@@ -241,7 +237,7 @@ class _SignUpState extends State<SignUp> {
                           child: InkWell(
                             child: Center(
                               child: Text(
-                                'Sign UP', 
+                                '註冊', 
                                 style: TextStyle(
                                   color: Colors.white, fontSize: 24.0,
                                   fontWeight: FontWeight.w600
@@ -282,7 +278,7 @@ class _SignUpState extends State<SignUp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Have an Account? Sign In!', 
+                        '已經有帳號了?現在登入!', 
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontWeight: FontWeight.w600,

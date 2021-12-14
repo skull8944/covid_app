@@ -40,6 +40,18 @@ class _MyPostState extends State<MyPost> {
     });
   }
 
+  Future<void> refreshPost() async {
+    List<Blog> friendPostList = await _blogService.getMyPost();
+    
+    if(friendPostList.length > 0) {
+      setState(() {
+        myBlogList.clear();
+        myBlogList = friendPostList;
+        postLength = myBlogList.length;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,27 +64,30 @@ class _MyPostState extends State<MyPost> {
         child: circle == true          
         ? CircularProgressIndicator()
         : myBlogList.length == 0
-          ? Text('No Post Yet')
-          : ListView.builder(
-          itemCount: postLength,
-          itemBuilder: (BuildContext context, int i) {
-            return BlogList(
-              postID: myBlogList[i].postID,
-              userName: myBlogList[i].userName, 
-              date: myBlogList[i].updatedTime,
-              imgUrls: myBlogList[i].images,
-              time: myBlogList[i].time,
-              distance: myBlogList[i].distance,
-              collect: myBlogList[i].collect,
-              deletePost: (String postID) {
-                myBlogList.removeWhere((item) => item.postID == postID);
-                setState(() {
-                  postLength--;
-                });
-              },
-            );
-          }          
-      ),
+          ? Text('還沒有貼文')
+          : RefreshIndicator(
+            onRefresh: refreshPost,
+            child: ListView.builder(
+            itemCount: postLength,
+            itemBuilder: (BuildContext context, int i) {
+              return BlogList(
+                postID: myBlogList[i].postID,
+                userName: myBlogList[i].userName, 
+                date: myBlogList[i].updatedTime,
+                imgUrls: myBlogList[i].images,
+                time: myBlogList[i].time,
+                distance: myBlogList[i].distance,
+                collect: myBlogList[i].collect,
+                deletePost: (String postID) {
+                  myBlogList.removeWhere((item) => item.postID == postID);
+                  setState(() {
+                    postLength--;
+                  });
+                },
+              );
+            }          
+                ),
+          ),
   )
     );
   }

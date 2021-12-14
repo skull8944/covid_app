@@ -12,7 +12,7 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/$name'),
+      final res = await http.post(Uri.parse('$host/user_profile/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
         },
@@ -36,7 +36,7 @@ class ProfileService {
   Future getProfile() async {
     SharedPreferences prefs =  await SharedPreferences.getInstance();
     var name = prefs.getString('name');
-    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/$name'));
+    final res = await http.Client().get(Uri.parse('$host/user_profile/$name'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       var result = jsonDecode(res.body);
       String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
@@ -50,7 +50,7 @@ class ProfileService {
   Future<Profile> getPro() async {
     SharedPreferences prefs =  await SharedPreferences.getInstance();
     var name = prefs.getString('name');
-    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/$name'));
+    final res = await http.Client().get(Uri.parse('$host/user_profile/$name'));
     Profile profile = Profile('', '','','','','');
     if(res.statusCode == 200 || res.statusCode == 201) {
       var result = jsonDecode(res.body);
@@ -63,7 +63,7 @@ class ProfileService {
   }
 
   Future<Profile> getFriendPro(String name) async {
-    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/$name'));
+    final res = await http.Client().get(Uri.parse('$host/user_profile/$name'));
     Profile profile = Profile('', '','','','','');
     if(res.statusCode == 200 || res.statusCode == 201) {
       var result = jsonDecode(res.body);
@@ -79,7 +79,7 @@ class ProfileService {
     SharedPreferences prefs =  await SharedPreferences.getInstance();
     var name = prefs.getString('name');
 
-    var req = http.MultipartRequest('PATCH', Uri.parse('http://172.20.10.13:7414/user_profile/addimg/$name'));
+    var req = http.MultipartRequest('PATCH', Uri.parse('$host/user_profile/addimg/$name'));
     req.files.add(await http.MultipartFile.fromPath("img", filepath));
     req.headers.addAll({
       "Content-Type": "multipart/form-data",
@@ -92,7 +92,7 @@ class ProfileService {
     try{
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user/$name'));
+      final res = await http.Client().get(Uri.parse('$host/user/$name'));
       if(res.statusCode == 200 || res.statusCode == 201) {
         var result = jsonDecode(res.body);
         User user = User(result['name'], result['name'], result['email']);
@@ -107,7 +107,7 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/height_edit/$name'),
+      final res = await http.post(Uri.parse('$host/user_profile/height_edit/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
         },
@@ -129,7 +129,7 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/weight_edit/$name'),
+      final res = await http.post(Uri.parse('$host/user_profile/weight_edit/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
         },
@@ -151,7 +151,7 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/sex_edit/$name'),
+      final res = await http.post(Uri.parse('$host/user_profile/sex_edit/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
         },
@@ -173,7 +173,7 @@ class ProfileService {
     try {
       SharedPreferences prefs =  await SharedPreferences.getInstance();
       var name = prefs.getString('name');
-      final res = await http.post(Uri.parse('http://172.20.10.13:7414/user_profile/birthdate_edit/$name'),
+      final res = await http.post(Uri.parse('$host/user_profile/birthdate_edit/$name'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=utf-8'
         },
@@ -192,14 +192,14 @@ class ProfileService {
   }
 
   Future<List<Profile>> getUserSuggestions(String query) async {
-    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/user_profile/suggestions/$query'));
+    final res = await http.Client().get(Uri.parse('$host/user_profile/suggestions/$query'));
     List<Profile> suggsetions = [];
     if(res.statusCode == 200 || res.statusCode == 201) {      
       Map<String, dynamic> usersMap = jsonDecode(res.body);
       List users = usersMap.values.toList();
       users.forEach((e) {
         suggsetions.add(
-          Profile(e[0]['userName'], '', '', '', '', 'http://172.20.10.13:7414/' + e[0]['headshot'].toString().replaceAll(r'\', r'/'))
+          Profile(e[0]['userName'], '', '', '', '', '$host/' + e[0]['headshot'].toString().replaceAll(r'\', r'/'))
         );
       });    
     }    

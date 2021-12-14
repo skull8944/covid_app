@@ -3,11 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class FriendService {
-
+  final String host = 'http://172.20.10.13:7414';
   Future addFriend(String userName2) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? userName = _prefs.getString('name');
-    final res = await http.post(Uri.parse('http://172.20.10.13:7414/friend/add/$userName/$userName2'));
+    final res = await http.post(Uri.parse('$host/add/$userName/$userName2'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       return 'success';
     } else {
@@ -18,7 +18,7 @@ class FriendService {
   Future acceptRequest(String userName2) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? userName = _prefs.getString('name');
-    final res = await http.post(Uri.parse('http://172.20.10.13:7414/friend/accept/$userName/$userName2'));
+    final res = await http.post(Uri.parse('$host/friend/accept/$userName/$userName2'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       return 'success';
     } else {
@@ -29,7 +29,7 @@ class FriendService {
   Future rejectRequest(String userName2) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? userName = _prefs.getString('name');
-    final res = await http.post(Uri.parse('http://172.20.10.13:7414/friend/reject/$userName/$userName2'));
+    final res = await http.post(Uri.parse('$host/friend/reject/$userName/$userName2'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       return 'success';
     } else {
@@ -41,7 +41,7 @@ class FriendService {
     List friends = [];
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? userName = _prefs.getString('name');
-    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/friend/friends/$userName'));
+    final res = await http.Client().get(Uri.parse('$host/friend/friends/$userName'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       List freindList = jsonDecode(res.body);
       friends = freindList;
@@ -55,7 +55,7 @@ class FriendService {
     List friendRequests = [];
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? userName = _prefs.getString('name');
-    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/friend/friend_requests/$userName'));
+    final res = await http.Client().get(Uri.parse('$host/friend/friend_requests/$userName'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       friendRequests = jsonDecode(res.body);
     }    
@@ -67,7 +67,7 @@ class FriendService {
     int friendStatus = 0;
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? userName = _prefs.getString('name');
-    final res = await http.Client().get(Uri.parse('http://172.20.10.13:7414/friend/friend_status/$userName/$userName2'));
+    final res = await http.Client().get(Uri.parse('$host/friend/friend_status/$userName/$userName2'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       friendStatus = int.parse(res.body);
     } 

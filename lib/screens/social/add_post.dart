@@ -54,9 +54,9 @@ class _AddPostState extends State<AddPost> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Center(child: Text('Add Post', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)),
+            Center(child: Text('新增貼文', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)),
             SizedBox(height: 30,),
-            Text('Record:', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),),
+            Text('運動紀錄:', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),),
             SizedBox(height: 20,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -92,7 +92,7 @@ class _AddPostState extends State<AddPost> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Photos:', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),),
+                Text('照片:', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),),
                 filesLength < 6
                 ? InkWell(
                     child: Icon(Icons.photo_library_rounded, color: Colors.grey[600], size: 30,),

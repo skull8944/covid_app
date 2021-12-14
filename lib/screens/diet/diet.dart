@@ -6,7 +6,13 @@ class Diet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('diet'),
+      child: Text(
+        '開發中',
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 28
+        ),
+      ),
     );
   }
 }

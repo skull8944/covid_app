@@ -58,7 +58,7 @@ class _FriendRequestState extends State<FriendRequest> {
                     padding: EdgeInsets.all(14),
                     color: Colors.grey[800],
                     child: Text(
-                      '<  Friend Request',
+                      '<  朋友請求 ',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -77,7 +77,7 @@ class _FriendRequestState extends State<FriendRequest> {
               height: MediaQuery.of(context).size.height * 0.7,
               child: Center(
                 child: Text(
-                  'No Friend Requests',
+                  '還沒有朋友請求',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600

@@ -101,7 +101,7 @@ class _UserProfileState extends State<UserProfile> {
                       padding: EdgeInsets.all(14),
                       color: Colors.grey[800],
                       child: Text(
-                        '<  Profile  ',
+                        '<  個人資料  ',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,

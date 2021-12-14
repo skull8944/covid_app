@@ -40,11 +40,7 @@ class _LoginState extends State<Login> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CircleAvatar(
-                        radius: 60.0,
-                        backgroundColor: Colors.white,
-                        child: Center(child: Text('logo'),),
-                      ),
+                      Image.asset('./assets/img/logo.png',scale: 19,),
                     ],
                   ),
                 ),                      
@@ -146,7 +142,7 @@ class _LoginState extends State<Login> {
                               });
                             },
                             decoration: InputDecoration(
-                              hintText: 'Password',
+                              hintText: '密碼',
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
@@ -179,7 +175,7 @@ class _LoginState extends State<Login> {
                           child: InkWell(
                             child: Center(
                               child: Text(
-                                'Log In', 
+                                '登入', 
                                 style: TextStyle(
                                   color: Colors.white, fontSize: 24.0,
                                   fontWeight: FontWeight.w600
@@ -225,7 +221,7 @@ class _LoginState extends State<Login> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Need an Account? Sign up!', 
+                        '需要一個帳號?現在註冊', 
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontWeight: FontWeight.w600,

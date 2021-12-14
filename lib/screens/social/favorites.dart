@@ -31,6 +31,18 @@ class _FavoritesState extends State<Favorites> {
     }
   }
 
+  Future<void> refreshPost() async {
+    List<Blog> friendPostList = await _blogService.getFavoritePost();
+    
+    if(friendPostList.length > 0) {
+      setState(() {
+        favoriteBlog.clear();
+        favoriteBlog = friendPostList;
+        postLength = favoriteBlog.length;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -61,7 +73,7 @@ class _FavoritesState extends State<Favorites> {
                     padding: EdgeInsets.all(14),
                     color: Colors.grey[800],
                     child: Text(
-                      '<  Favorites  ',
+                      '<  收藏  ',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -77,27 +89,30 @@ class _FavoritesState extends State<Favorites> {
             ),
             postLength > 0
             ? Expanded(
-              child: ListView.builder(
-                itemCount: postLength,
-                itemBuilder: (context, i) => BlogList(
-                  postID: favoriteBlog[i].postID, 
-                  userName: favoriteBlog[i].userName, 
-                  date: favoriteBlog[i].updatedTime, 
-                  imgUrls: favoriteBlog[i].images, 
-                  distance: favoriteBlog[i].distance, 
-                  time: favoriteBlog[i].time,
-                  collect: favoriteBlog[i].collect,
-                  deletePost: () {
-
-                  }
-                )
+              child: RefreshIndicator(
+                onRefresh: refreshPost,
+                child: ListView.builder(
+                  itemCount: postLength,
+                  itemBuilder: (context, i) => BlogList(
+                    postID: favoriteBlog[i].postID, 
+                    userName: favoriteBlog[i].userName, 
+                    date: favoriteBlog[i].updatedTime, 
+                    imgUrls: favoriteBlog[i].images, 
+                    distance: favoriteBlog[i].distance, 
+                    time: favoriteBlog[i].time,
+                    collect: favoriteBlog[i].collect,
+                    deletePost: () {
+              
+                    }
+                  )
+                ),
               )
             )
             : Container(
               height: MediaQuery.of(context).size.height * 0.7,
               child: Center(
                 child: Text(
-                  'No Favorite Post',
+                  '還沒有收藏的貼文',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600

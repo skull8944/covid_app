@@ -99,7 +99,7 @@ class _BlogListState extends State<BlogList> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(widget.userName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
-                          Text(widget.date, style: TextStyle(color: Colors.grey[700], fontSize: 10.5),)
+                          Text(widget.date.substring(0,10), style: TextStyle(color: Colors.grey[700], fontSize: 10.5),)
                         ],
                       ),
                       InkWell(
@@ -271,11 +271,11 @@ class _BlogListState extends State<BlogList> {
                 }).toList(),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('中正紀念堂'),
                   Expanded(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(right: 5),
@@ -285,6 +285,13 @@ class _BlogListState extends State<BlogList> {
                           padding: EdgeInsets.only(right: 5),
                           child: Text(widget.time, style: TextStyle(color: Colors.grey[750]),),
                         ),
+                      ],
+                    )
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(right: 5),
                           child: SvgPicture.asset('assets/img/distance.svg', color: Colors.grey[750],),

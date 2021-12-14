@@ -38,8 +38,8 @@ class _SocialState extends State<Social> {
     List<Blog> friendPostList = await _blogService.getFriendPost();
     
     if(friendPostList.length > 0) {
-      friendPost.clear();
       setState(() {
+        friendPost.clear();
         friendPost = friendPostList;
         postLength = friendPost.length;
       });
@@ -83,7 +83,7 @@ class _SocialState extends State<Social> {
           height: MediaQuery.of(context).size.height * 0.7,
           child: Center(
               child: Text(
-                'No Post Yet',
+                '還沒有貼文',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600

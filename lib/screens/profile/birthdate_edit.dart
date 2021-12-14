@@ -45,7 +45,7 @@ class _BirthdateEditState extends State<BirthdateEdit> {
         : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [            
-            Text('Birthdate: $birthDateInString', style: TextStyle(fontSize: 20.0),),
+            Text('生日: $birthDateInString', style: TextStyle(fontSize: 20.0),),
             SizedBox(height: 10.0,),
             GestureDetector(
               child: new Icon(Icons.calendar_today_outlined, size: 30.0, color: Colors.blue,),
@@ -71,12 +71,13 @@ class _BirthdateEditState extends State<BirthdateEdit> {
               borderRadius: BorderRadius.circular(22.5),
               child: Container(
                 width: 100.0,
-                height: 35.0,
+                height: 40.0,
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
                   ),
-                  child: Text('Submit', 
+                  child: Text(
+                    '更改', 
                     style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,

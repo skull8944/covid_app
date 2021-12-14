@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
                     textFieldConfiguration: TextFieldConfiguration(
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
-                        hintText: 'Search Username'
+                        hintText: '搜尋使用者'
                       )
                     ),
                     suggestionsCallback: _profileService.getUserSuggestions,
@@ -118,7 +118,7 @@ class _HomeState extends State<Home> {
                     noItemsFoundBuilder: (context) => Container(
                       height: 100,
                       child: Center(
-                        child: Text('No users found', style: TextStyle(fontSize: 20),),
+                        child: Text('找不到使用者', style: TextStyle(fontSize: 20),),
                       ),
                     ),
                   )

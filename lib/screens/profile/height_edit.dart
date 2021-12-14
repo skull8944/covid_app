@@ -61,12 +61,13 @@ class _HeightEditState extends State<HeightEdit> {
             borderRadius: BorderRadius.circular(22.5),
             child: Container(
               width: 100.0,
-              height: 35.0,
+              height: 40.0,
               child: TextButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
                 ),
-                child: Text('Submit', 
+                child: Text(
+                  '更改', 
                   style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,

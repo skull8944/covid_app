@@ -97,7 +97,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           color: Colors.grey[900],
                           child: ListTile(
                             leading: Icon(Icons.person_outline_rounded, size: 35.0, color: Colors.white,),
-                            title: Text('Profile', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            title: Text('個人資料', style: TextStyle(fontSize: 18.0, color: Colors.white)),
                             onTap: () {         
                               Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile( notifyParent: () { _getProfile(); },)));
                             },
@@ -107,7 +107,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           color: Colors.grey[900],
                           child: ListTile(
                             leading: Icon(Icons.people_alt_outlined, size: 35.0, color: Colors.white,),
-                            title: Text('Friends', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            title: Text('朋友', style: TextStyle(fontSize: 18.0, color: Colors.white)),
                             onTap: () {         
                               Navigator.push(context, MaterialPageRoute(builder: (context) =>FriendList()));
                             },
@@ -117,7 +117,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           color: Colors.grey[900],
                           child: ListTile(
                             leading: Icon(Icons.group_add_rounded, size: 35.0, color: Colors.white,),
-                            title: Text('Friend Requests', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            title: Text('朋友請求', style: TextStyle(fontSize: 18.0, color: Colors.white)),
                             onTap: () {         
                               Navigator.push(context, MaterialPageRoute(builder: (context) => FriendRequest()));
                             },
@@ -127,7 +127,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                           color: Colors.grey[900],
                           child: ListTile(
                             leading: Icon(Icons.turned_in_not_outlined, size: 35.0, color: Colors.white,),
-                            title: Text('Favorites', style: TextStyle(fontSize: 18.0, color: Colors.white)),
+                            title: Text('收藏', style: TextStyle(fontSize: 18.0, color: Colors.white)),
                             onTap: () {         
                               Navigator.push(context, MaterialPageRoute(builder: (context) => Favorites()));
                             },
@@ -156,7 +156,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
                                 color: Colors.grey[800],
                                 child: Center(
                                   child: Text(
-                                    'LOG OUT', 
+                                    '登出', 
                                     style: TextStyle(
                                       fontSize: 23.0, 
                                       color: Colors.white,
