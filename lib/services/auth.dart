@@ -3,9 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth{
-
+  final String host = 'http://172.20.10.13:7414';
   Future signup(String email, String password, String name) async{
-    var res = await http.post(Uri.parse("http://172.20.10.13:7414/signup"),
+    var res = await http.post(Uri.parse("$host/signup"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=utf-8'
       },
@@ -24,7 +24,7 @@ class Auth{
   }
   
   Future login(String email, String password) async{
-    var res = await http.post(Uri.parse("http://172.20.10.13:7414/login"),
+    var res = await http.post(Uri.parse("$host/login"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=utf-8'
       },

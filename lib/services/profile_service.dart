@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class ProfileService {
   
-  final String host = "http://172.20.10.13:7414/";
+  final String host = "http://172.20.10.13:7414";
 
   Future uploadProfile(String sex, String height, String weight, String birthdate) async {
     try {
@@ -37,12 +37,17 @@ class ProfileService {
     SharedPreferences prefs =  await SharedPreferences.getInstance();
     var name = prefs.getString('name');
     final res = await http.Client().get(Uri.parse('$host/user_profile/$name'));
+    print('$host/user_profile/$name');
+    print(res.statusCode);
+    print(jsonDecode(res.body));
     if(res.statusCode == 200 || res.statusCode == 201) {
+      print('get');
       var result = jsonDecode(res.body);
-      String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
+      String imgUrl = host + '/' + result['headshot'].replaceAll(r'\', r'/');
       Profile profile = Profile(name!, result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
       return profile;
     } else {
+      print('no data');
       return 'no data';
     }      
   }
@@ -54,7 +59,7 @@ class ProfileService {
     Profile profile = Profile('', '','','','','');
     if(res.statusCode == 200 || res.statusCode == 201) {
       var result = jsonDecode(res.body);
-      String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
+      String imgUrl = host + '/' + result['headshot'].replaceAll(r'\', r'/');
       profile = Profile(name!, result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
       return profile;
     } else {
@@ -67,7 +72,7 @@ class ProfileService {
     Profile profile = Profile('', '','','','','');
     if(res.statusCode == 200 || res.statusCode == 201) {
       var result = jsonDecode(res.body);
-      String imgUrl = host + result['headshot'].replaceAll(r'\', r'/');
+      String imgUrl = host + '/' + result['headshot'].replaceAll(r'\', r'/');
       profile = Profile(name, result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
       return profile;
     } else {

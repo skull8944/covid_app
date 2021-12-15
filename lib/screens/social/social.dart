@@ -26,11 +26,13 @@ class _SocialState extends State<Social> {
    List<Blog> friendPostList = await _blogService.getFriendPost();
    
    if(friendPostList.length > 0) {
-     setState(() {
-       friendPost = friendPostList;
-       postLength = friendPost.length;
-       circle = false;
-     });
+     if(mounted) {
+       setState(() {
+        friendPost = friendPostList;
+        postLength = friendPost.length;
+        circle = false;
+      });
+     }
    }
   }
 
