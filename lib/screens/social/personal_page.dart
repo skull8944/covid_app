@@ -303,6 +303,7 @@ class _PersonalPageState extends State<PersonalPage> {
                         time: myBlogList[i].time,
                         distance: myBlogList[i].distance,
                         collect: myBlogList[i].collect,
+                        runRecordID: myBlogList[i].runRecordId,
                         deletePost: (String postID) {
                           myBlogList.removeWhere((item) => item.postID == postID);
                           setState(() {

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class BlogService {
   final String host = 'http://172.20.10.13:7414';
-  Future postBlog(String distance, String time) async {
+  Future postBlog(String runRecordID, String distance, String time) async {
     try {
       SharedPreferences _prefs = await SharedPreferences.getInstance();
       var token = _prefs.getString('token');
@@ -18,6 +18,7 @@ class BlogService {
           'userName': userName,
           'distance': distance,
           'time': time,
+          'runRecordID': runRecordID,
         }));
 
         if(res.statusCode == 200 || res.statusCode == 201) {
@@ -60,7 +61,8 @@ class BlogService {
             e['distance'], 
             e['time'], 
             e['created_at'], 
-            e['collect'] == 'true'
+            e['collect'] == 'true',
+            e['runRecordID']
           )
         );
         print(myBlogList[0].images[0]);
@@ -88,7 +90,8 @@ class BlogService {
             e['distance'], 
             e['time'], 
             e['created_at'], 
-            e['collect'] == 'true'
+            e['collect'] == 'true',
+            e['runRecordID']
           )
         );
         print(myBlogList[0].images[0]);
@@ -113,7 +116,8 @@ class BlogService {
             e['distance'], 
             e['time'], 
             e['created_at'], 
-            e['collect'] == 'true'
+            e['collect'] == 'true',
+            e['runRecordID']
           )
         );
       });
@@ -155,7 +159,8 @@ class BlogService {
             e['distance'], 
             e['time'], 
             e['created_at'], 
-            e['collect'] == 'true'
+            e['collect'] == 'true',
+            e['runRecordID']
           )
         );
       });

@@ -101,6 +101,7 @@ class _FavoritesState extends State<Favorites> {
                     distance: favoriteBlog[i].distance, 
                     time: favoriteBlog[i].time,
                     collect: favoriteBlog[i].collect,
+                    runRecordID: favoriteBlog[i].runRecordId,
                     deletePost: () {
               
                     }

@@ -1,18 +1,14 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 class RunRecord {
 
-  String recordID;
-  String userName;
+  String runRecordID;
   String date;
   String distance;
   String time;
   String calories;
-  List<LatLng> marks;
+  List marks;
 
   RunRecord(
-    this.recordID,
-    this.userName, 
+    this.runRecordID,
     this.date, 
     this.distance, 
     this.time, 

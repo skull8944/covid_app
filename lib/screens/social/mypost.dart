@@ -78,6 +78,7 @@ class _MyPostState extends State<MyPost> {
                 time: myBlogList[i].time,
                 distance: myBlogList[i].distance,
                 collect: myBlogList[i].collect,
+                runRecordID: myBlogList[i].runRecordId,
                 deletePost: (String postID) {
                   myBlogList.removeWhere((item) => item.postID == postID);
                   setState(() {

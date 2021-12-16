@@ -74,6 +74,7 @@ class _SocialState extends State<Social> {
                 time: friendPost[i].time,
                 distance: friendPost[i].distance,
                 collect: friendPost[i].collect,
+                runRecordID: friendPost[i].runRecordId,
                 deletePost: () {
                 
                 },

@@ -6,6 +6,16 @@ class Blog {
   String time;
   String updatedTime;
   bool collect;
+  String runRecordId;
 
-  Blog(this.postID, this.userName, this.images, this.distance, this.time, this.updatedTime, this.collect);
+  Blog(
+    this.postID, 
+    this.userName, 
+    this.images, 
+    this.distance, 
+    this.time, 
+    this.updatedTime, 
+    this.collect,
+    this.runRecordId
+  );
 }

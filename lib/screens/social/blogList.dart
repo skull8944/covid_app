@@ -13,6 +13,7 @@ class BlogList extends StatefulWidget {
   final String distance;
   final String time;
   final bool collect;
+  final String runRecordID;
   final Function deletePost;
 
   BlogList({ 
@@ -24,7 +25,8 @@ class BlogList extends StatefulWidget {
     required this.distance, 
     required this.time,
     required this.deletePost,
-    required this.collect
+    required this.collect,
+    required this.runRecordID
   }) : super(key: key);
 
   @override

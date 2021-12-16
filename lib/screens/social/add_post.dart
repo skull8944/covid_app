@@ -4,10 +4,11 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:covid_app/services/blog_service.dart';
 
 class AddPost extends StatefulWidget {
+  final String runRecordID;
   final String distance;
   final String time;
   final String calories;
-  const AddPost({ Key? key, required this.distance, required this.time, required this.calories }) : super(key: key);
+  const AddPost({ Key? key,required this.runRecordID, required this.distance, required this.time, required this.calories }) : super(key: key);
 
   @override
   _AddPostState createState() => _AddPostState();
@@ -160,7 +161,7 @@ class _AddPostState extends State<AddPost> {
                     ),
                   ),
                   onTap: () async {
-                    dynamic res = await _blogService.postBlog(widget.distance, widget.time);
+                    dynamic res = await _blogService.postBlog(widget.runRecordID, widget.distance, widget.time);
                     print(res['postID']);
                     print(filesPaths);
                     dynamic imgRes = await _blogService.patchImage(res['postID'], filesPaths);

@@ -96,9 +96,11 @@ class _RunningDetailState extends State<RunningDetail> {
       for(var item in polyline.points) {
         print(item);
       }
-      setState(() {
-        polylines[polylineId] = polyline;
-      });      
+      if(mounted) {
+        setState(() {
+          polylines[polylineId] = polyline;
+        });  
+      }    
     });
   }
 
