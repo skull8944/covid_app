@@ -1,40 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:covid_app/services/geolocator_service.dart';
-import 'dart:async';
-import 'package:covid_app/screens/home/loading.dart';
+import 'package:covid_app/screens/running/running_detail.dart';
 
 class RunningMap extends StatefulWidget {
+  const RunningMap({ Key? key }) : super(key: key);
+
   @override
-  _CovidMapState createState() => _CovidMapState();
+  _RunningMapState createState() => _RunningMapState();
 }
 
-class _CovidMapState extends State<RunningMap> {
-
-  MarkerId _start = MarkerId('start');
-
-  final geoService = GeolocatorService();
-  Completer<GoogleMapController> _controller = Completer();
-
-  Future<void> centerScreen(Position position) async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 18.0)
-      )
-    );
-  }
-
-  @override
-  void initState() {
-    geoService.getCurrentLocation().listen((position) {
-      centerScreen(position);
-    });
-    super.initState();
-  }
-
+class _RunningMapState extends State<RunningMap> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,28 +26,21 @@ class _CovidMapState extends State<RunningMap> {
             ),
           ),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Loading()));
+            showModalBottomSheet(
+              enableDrag: false,
+              isScrollControlled: true,
+              isDismissible: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+              ),
+              context: context, 
+              builder: (BuildContext context) {
+                return RunningDetail();
+              }
+            );
           },
-        ),
-        /*FutureBuilder<Position?>(
-        future: geoService.getInitialLocation(),
-        builder: (BuildContext context, AsyncSnapshot<Position?> snapshot) {
-          return snapshot.connectionState == ConnectionState.waiting
-          ? Loading()
-          : GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(snapshot.data!.latitude, snapshot.data!.longitude), zoom: 18.0
-            ),
-            myLocationEnabled: true,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },      
-            markers: {
-              Marker(position: LatLng(snapshot.data!.latitude, snapshot.data!.longitude), markerId: _start,),
-            },
-          );
-        },          
-      ),*/
-    ));
+        ),        
+      )
+    );
   }
 }

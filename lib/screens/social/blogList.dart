@@ -32,7 +32,7 @@ class BlogList extends StatefulWidget {
 }
 
 class _BlogListState extends State<BlogList> {
-
+  final host = 'http://172.20.10.13:7414/';
   bool showMore = false;
   String myName = '';
   String imgUrl = '';
@@ -166,7 +166,7 @@ class _BlogListState extends State<BlogList> {
                             child: Stack(
                               children: <Widget>[
                                 Image.network(
-                                  'http://172.20.10.13:7414/' + item.replaceAll(r'\', r'/'),
+                                  host + item.replaceAll(r'\', r'/'),
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                 ),

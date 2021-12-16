@@ -1,3 +1,4 @@
+import 'package:covid_app/models/run_record.dart';
 import 'package:covid_app/screens/social/add_post.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,21 @@ class RunningRecord extends StatefulWidget {
 }
 
 class _RunningRecordState extends State<RunningRecord> {
+
+  List<RunRecord> runRecords = [
+    RunRecord('87', '87','2021', '500', '72', '111', [])
+  ];
+
+  void getRunRecords() async {
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getRunRecords();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -44,7 +60,16 @@ class _RunningRecordState extends State<RunningRecord> {
                             width: MediaQuery.of(context).size.width * 0.28,
                             padding: EdgeInsets.all(14),
                             color: Color.fromARGB(255, 246, 195, 100),
-                            child: Center(child: Text('Today', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 23,),))
+                            child: Center(
+                              child: Text(
+                                'Today', 
+                                style: TextStyle(
+                                  color: Colors.white, 
+                                  fontWeight: FontWeight.w600, 
+                                  fontSize: 23,
+                                ),
+                              )
+                            )
                           ),
                         ),
                       ),
@@ -141,13 +166,12 @@ class _RunningRecordState extends State<RunningRecord> {
                             ],
                           )
                         ),
-                        
                       ],
                     ),
                   ),                  
                 ],
               ),
-            );            
+            );
           }          
         ),
       ),
