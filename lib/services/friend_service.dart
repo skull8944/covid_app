@@ -7,7 +7,7 @@ class FriendService {
   Future addFriend(String userName2) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? userName = _prefs.getString('name');
-    final res = await http.post(Uri.parse('$host/add/$userName/$userName2'));
+    final res = await http.post(Uri.parse('$host/friend/add/$userName/$userName2'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       return 'success';
     } else {

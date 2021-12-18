@@ -64,6 +64,7 @@ class _PersonalPageState extends State<PersonalPage> {
      friendStatus = fstatus;
      statusCircle = false;
    });
+   print('friendStatus: '+friendStatus.toString());
   }
 
   @override
@@ -81,183 +82,183 @@ class _PersonalPageState extends State<PersonalPage> {
         title: Row(
           children: <Widget>[
             Expanded(
-                child: Row(
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.grey,
-                      backgroundImage: NetworkImage(widget.imgUrl,),
+              child: Row(
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: NetworkImage(widget.imgUrl,),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      widget.userName, 
+                      style: TextStyle(color: Colors.grey[800], fontSize: 20, fontWeight: FontWeight.w600),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        widget.userName, 
-                        style: TextStyle(color: Colors.grey[800], fontSize: 20, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ],
-                )
-              ),     
-              statusCircle
-              ? CircularProgressIndicator()               
-              : friendStatus == 2
-                ? Row(
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(35),
-                      child: Container(
-                        width: 65,
-                        color: Color.fromARGB(255, 246, 195, 100),
-                        padding: EdgeInsets.all(5),
-                        child: InkWell(
-                          child: Center(child: Text('接受')),
-                          onTap: () async {
-                            setState(() {
-                              statusCircle = true;
-                            });
-                            dynamic result = await _friendService.acceptRequest(widget.userName);
-                            if(result == 'success') {
-                              setState(() {
-                                friendStatus = 3;
-                                statusCircle = false;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5,),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(35),
-                      child: Container(
-                        width: 65,
-                        color: Color.fromARGB(255, 149, 148, 149),
-                        padding: EdgeInsets.all(5),
-                        child: InkWell(
-                          child: Center(child: Text('拒絕')),
-                          onTap: () async {
-                            setState(() {
-                              statusCircle = true;
-                            });
-                            dynamic result = await _friendService.rejectRequest(widget.userName);
-                            if(result == 'success') {
-                              setState(() {
-                                friendStatus = 0;
-                                statusCircle = false;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    )
-                  ],
-                )
-                : InkWell(
-                  child: ClipRRect(
+                  ),
+                ],
+              )
+            ),     
+            statusCircle
+            ? CircularProgressIndicator()               
+            : friendStatus == 2
+              ? Row(
+                children: <Widget>[
+                  ClipRRect(
                     borderRadius: BorderRadius.circular(35),
                     child: Container(
-                      color: Colors.grey,
-                      width: 80,
-                      height: 35,
-                      child: Center(
-                        child: Text(
-                          friendStatusList[friendStatus],
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600
-                          ),
-                        )
+                      width: 65,
+                      color: Color.fromARGB(255, 246, 195, 100),
+                      padding: EdgeInsets.all(5),
+                      child: InkWell(
+                        child: Center(child: Text('接受')),
+                        onTap: () async {
+                          setState(() {
+                            statusCircle = true;
+                          });
+                          dynamic result = await _friendService.acceptRequest(widget.userName);
+                          if(result == 'success') {
+                            setState(() {
+                              friendStatus = 3;
+                              statusCircle = false;
+                            });
+                          }
+                        },
                       ),
-                    )
+                    ),
                   ),
-                  onTap: () async {
-                    switch (friendStatus) {
-                      case 0:
-                        print('add');
-                        setState(() {
-                          statusCircle = true;
-                        });
-                        dynamic result = await _friendService.addFriend(widget.userName);
-                        print(result);
-                        if(result == 'success') {
+                  SizedBox(width: 5,),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(35),
+                    child: Container(
+                      width: 65,
+                      color: Color.fromARGB(255, 149, 148, 149),
+                      padding: EdgeInsets.all(5),
+                      child: InkWell(
+                        child: Center(child: Text('拒絕')),
+                        onTap: () async {
                           setState(() {
-                            friendStatus = 1;
-                            statusCircle = false;
+                            statusCircle = true;
                           });
-                          print('status： '+friendStatus.toString());
-                        }
-                        break;
-                      case 1:
-                        print('reject');
+                          dynamic result = await _friendService.rejectRequest(widget.userName);
+                          if(result == 'success') {
+                            setState(() {
+                              friendStatus = 0;
+                              statusCircle = false;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              )
+              : InkWell(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(35),
+                  child: Container(
+                    color: Colors.grey,
+                    width: 80,
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        friendStatusList[friendStatus],
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600
+                        ),
+                      )
+                    ),
+                  )
+                ),
+                onTap: () async {
+                  switch (friendStatus) {
+                    case 0:
+                      print('add');
+                      setState(() {
+                        statusCircle = true;
+                      });
+                      dynamic result = await _friendService.addFriend(widget.userName);
+                      print('add: '+result);
+                      if(result == 'success') {
                         setState(() {
-                          statusCircle = true;
+                          friendStatus = 1;
+                          statusCircle = false;
                         });
-                        dynamic result = await _friendService.rejectRequest(widget.userName);
-                        print(result);
-                        if(result == 'success') {
-                          setState(() {
-                            friendStatus = 0;
-                            statusCircle = false;
-                          });
-                          print('status： '+friendStatus.toString());
-                        }
-                        break;
-                      case 3:
-                        showDialog(
-                          context: context, 
-                          builder: (BuildContext context) => AlertDialog(
-                            content: Text(
-                              '確定取消好友關係?', 
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20
-                              ),),
-                            actions: <Widget> [
-                              InkWell(
-                                child: Container(
-                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                  child: Text(
-                                    '確定',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                      color: Colors.green
-                                    ),
-                                  )
-                                ),
-                                onTap: () async {
-                                  dynamic result = await _friendService.rejectRequest(widget.userName);
-                                  if(result == 'success') {
-                                    Navigator.pop(context);
-                                  }
-                                },
+                        print('status： '+friendStatus.toString());
+                      }
+                      break;
+                    case 1:
+                      print('reject');
+                      setState(() {
+                        statusCircle = true;
+                      });
+                      dynamic result = await _friendService.rejectRequest(widget.userName);
+                      print(result);
+                      if(result == 'success') {
+                        setState(() {
+                          friendStatus = 0;
+                          statusCircle = false;
+                        });
+                        print('status： '+friendStatus.toString());
+                      }
+                      break;
+                    case 3:
+                      showDialog(
+                        context: context, 
+                        builder: (BuildContext context) => AlertDialog(
+                          content: Text(
+                            '確定取消好友關係?', 
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20
+                            ),),
+                          actions: <Widget> [
+                            InkWell(
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                child: Text(
+                                  '確定',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Colors.green
+                                  ),
+                                )
                               ),
-                              InkWell(
-                                child: Container(
-                                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                  child: Text(
-                                    '取消',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                      color: Colors.red
-                                    ),
-                                  )
-                                ),
-                                onTap: () {
+                              onTap: () async {
+                                dynamic result = await _friendService.rejectRequest(widget.userName);
+                                if(result == 'success') {
                                   Navigator.pop(context);
-                                },
-                              )
-                            ]
-                          )                                    
-                        );
-                        break; 
-                      default:
-                        print('default');
-                        break;
-                    }                  
-                  },
-                )
+                                }
+                              },
+                            ),
+                            InkWell(
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                child: Text(
+                                  '取消',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Colors.red
+                                  ),
+                                )
+                              ),
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                            )
+                          ]
+                        )                                    
+                      );
+                      break; 
+                    default:
+                      print('default');
+                      break;
+                  }                  
+                },
+              )
           ],
         ),
         /*Text(
@@ -274,8 +275,7 @@ class _PersonalPageState extends State<PersonalPage> {
       body: SafeArea(
         child: Center(
           child: Column(
-            children: <Widget>[
-             
+            children: <Widget>[             
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: refreshPost,
