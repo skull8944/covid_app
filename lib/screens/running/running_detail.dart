@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:covid_app/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 
 class RunningDetail extends StatefulWidget {
   const RunningDetail({ Key? key }) : super(key: key);
@@ -13,10 +17,12 @@ class _RunningDetailState extends State<RunningDetail> {
 
   bool _isRunning = false;
   bool _openMap = false;
-
-  Position? _position;
-  Position? _position_old;
-  Position? _initialPosition;
+  bool _isPaused = false;
+  double distance = 0;
+  int _tick = 1;
+  int time = 0;
+  int marksLength = 0;
+  double weight = 0;
 
   //繪圖
   Map<PolylineId, Polyline> polylines = <PolylineId, Polyline>{};
@@ -24,52 +30,23 @@ class _RunningDetailState extends State<RunningDetail> {
   PolylineId? selectedPolyline;
 
   // Completer<GoogleMapController> _mapControllerCompleter = Completer();
-  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   GoogleMapController? _mapController;  
+  StreamSubscription<Position>? _getPositionStream;
+  List<LatLng> marks = [];
+  ProfileService _profileService = ProfileService();
 
-  Future<void> getInitialPosition() async {
-    _initialPosition = await Geolocator.getCurrentPosition();
-    _position = _initialPosition;
-    _position_old = _initialPosition;
-  }
-
-  void _addMarker(var id, Position pos) {
-    final MarkerId markerId = MarkerId(id);
-
-    // creating a new MARKER
-    final Marker marker = Marker(
-      markerId: markerId,
-      position: LatLng(pos.latitude, pos.longitude),
-      infoWindow: InfoWindow(title: id, snippet: '*'),
-      onTap: () {
-        _onMarkerTapped(markerId);
-      },
-    );
-
+  void getWeight() async {
+    final res = await _profileService.getPro();
     setState(() {
-      // adding a new marker to map
-      markers[markerId] = marker;
+      weight = double.parse(res.weight);
     });
-  }
-
-  void _onMarkerTapped(MarkerId id) {}
-
-  //繪圖
-  List<LatLng> _createPoints() {
-    final List<LatLng> points = <LatLng>[];
-    points.add(LatLng(_position_old!.latitude,_position_old!.longitude));
-    points.add(LatLng(_position!.latitude, _position!.longitude));
-    _position_old=_position;
-    return points;
+    print(weight);
   }
 
   @override
   void initState() {
-    super.initState();
-    _position = null;
-    getInitialPosition();
-    // Use this static method to start listening to a stream with position updates
-    Geolocator.getPositionStream(
+    super.initState();      
+    _getPositionStream = Geolocator.getPositionStream(
       desiredAccuracy: LocationAccuracy.best,
       distanceFilter: 0,
       forceAndroidLocationManager: false,
@@ -77,31 +54,47 @@ class _RunningDetailState extends State<RunningDetail> {
     ).listen((position) {
       _mapController?.animateCamera(
           CameraUpdate.newCameraPosition(CameraPosition(zoom: 14, target: LatLng(position.latitude, position.longitude))));
-      //加上paint
       final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
       _polylineIdCounter++;
       final PolylineId polylineId = PolylineId(polylineIdVal);
-      if(mounted) {
+      marks.add(LatLng(position.latitude, position.longitude));
+      setState(() {
+        time++;
+        marksLength = marks.length;
+      });
+      print(marksLength);
+      if(marks.length > 2) {
         setState(() {
-          _position = position;
+          distance += Geolocator.distanceBetween(
+            marks[marks.length-2].latitude, marks[marks.length-2].longitude, 
+            marks[marks.length-1].latitude, marks[marks.length-1].longitude
+          );
         });
       }
       final Polyline polyline = Polyline(
         polylineId: polylineId,
         consumeTapEvents: false,
-        color: Colors.orange,
+        color: Color.fromARGB(255, 246, 195, 100),
         width: 5,
-        points: _createPoints(),
+        points: marks,
       );
-      for(var item in polyline.points) {
-        print(item);
-      }
       if(mounted) {
         setState(() {
           polylines[polylineId] = polyline;
         });  
       }    
     });
+    getWeight();
+  }
+
+  double getCalories(double weight, double distance) {
+    return weight*distance*1.036;
+  }
+  
+  @override
+  void dispose() async {
+    super.dispose();
+     _getPositionStream!.cancel();
   }
 
   @override
@@ -132,10 +125,11 @@ class _RunningDetailState extends State<RunningDetail> {
                         size: 35,
                       ),
                       onTap: () {
+                        if(_openMap == true)
+                          _mapController!.dispose();
                         setState(() {
                           _openMap = !_openMap;
                         });
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) => Run(marks: [],)));
                       },
                     ),
                   ),
@@ -165,15 +159,14 @@ class _RunningDetailState extends State<RunningDetail> {
                     decoration: BoxDecoration(
                       border: Border.all(color: Color.fromARGB(255, 246, 195, 100),width: 5)
                     ),
-                    child: _position == null
+                    child: marksLength == 0
                     ? Center(
                       child: CircularProgressIndicator(color: Colors.grey[500],)
                     )
                     : GoogleMap(
                       mapType: MapType.normal,
-                      markers: Set<Marker>.of(markers.values),
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(_position!.latitude, _position!.longitude),
+                        target: LatLng(marks[0].latitude, marks[0].longitude),
                         zoom: 14,
                       ),
                       polylines: Set<Polyline>.of(polylines.values),
@@ -196,7 +189,7 @@ class _RunningDetailState extends State<RunningDetail> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('13m', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
+                          Text((distance/1000).toStringAsFixed(2)+'km', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
                           Text('距離', style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),),
                         ],
                       )
@@ -212,7 +205,7 @@ class _RunningDetailState extends State<RunningDetail> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('06:12', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
+                        Text(time.toString(), style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
                         Text('時間', style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),),
                       ],
                     )
@@ -244,12 +237,27 @@ class _RunningDetailState extends State<RunningDetail> {
                   children: [
                     InkWell(
                       child: Icon(
-                        Icons.pause_rounded, 
+                        _isPaused 
+                        ? Icons.play_arrow_rounded
+                        : Icons.pause_rounded,
                         color: Colors.grey[600],
                         size: 45,
                       ),
                       onTap: () {
-
+                        if(_getPositionStream!.isPaused) {
+                          _getPositionStream!.resume();
+                          setState(() {
+                            _tick = 1;
+                          });
+                        } else{
+                         _getPositionStream!.pause();
+                          setState(() {
+                            _tick = 0;
+                          });
+                        }                      
+                        setState(() {
+                          _isPaused = !_isPaused;
+                        });
                       },
                     ),
                     InkWell(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 import 'package:covid_app/models/run_record.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -69,8 +70,21 @@ class GeolocatorService {
   }
 
   Future deleteRecord(String recordID) async {
-    final res = await http.delete(Uri.parse('$host/run/$recordID'));
+    final res = await http.delete(Uri.parse('$host/run/marks/$recordID'));
     return res.body;
   }
     
+  Future<List<LatLng>> getMarks(String runRecordID) async {
+    List<LatLng> marks = [];
+    final res = await http.Client().get(Uri.parse('$host/run/$runRecordID'));
+    if(res.statusCode == 200 || res.statusCode == 201) {
+      List result = jsonDecode(res.body);
+      result.forEach((e) { 
+        marks.add(
+          LatLng(e['latitude'], e['longitude'])
+        );
+      });
+    }
+    return marks;
+  }
 }

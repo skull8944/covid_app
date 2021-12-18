@@ -1,8 +1,11 @@
+import 'package:covid_app/screens/running/running_marks.dart';
 import 'package:covid_app/services/blog_service.dart';
+import 'package:covid_app/services/geolocator_service.dart';
 import 'package:covid_app/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BlogList extends StatefulWidget {
@@ -41,6 +44,7 @@ class _BlogListState extends State<BlogList> {
   ProfileService _profileService = ProfileService();
   BlogService _blogService = BlogService();
   bool collectState = false;
+  GeolocatorService _geolocatorService = GeolocatorService();
 
   void getMyName()  async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -106,8 +110,20 @@ class _BlogListState extends State<BlogList> {
                       ),
                       InkWell(
                         child: Icon(Icons.location_on_sharp, color: Colors.grey[700], size: 35.0,),
-                        onTap: () {
-
+                        onTap: () async {
+                          List<LatLng> marks = await _geolocatorService.getMarks(widget.runRecordID);
+                          showDialog(
+                            context: context, 
+                            builder: (BuildContext context) => SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.5,      
+                              width: MediaQuery.of(context).size.width * 0.9,                
+                              child: Dialog(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                insetPadding: EdgeInsets.zero,
+                                child: RunningMarks(marks: marks,)
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ],
