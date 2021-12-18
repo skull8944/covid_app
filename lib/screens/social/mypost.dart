@@ -63,11 +63,11 @@ class _MyPostState extends State<MyPost> {
       body: Center(
         child: circle == true          
         ? CircularProgressIndicator()
-        : myBlogList.length == 0
+        :  RefreshIndicator(
+          onRefresh: refreshPost,
+          child:myBlogList.length == 0
           ? Text('還沒有貼文')
-          : RefreshIndicator(
-            onRefresh: refreshPost,
-            child: ListView.builder(
+          : ListView.builder(
             itemCount: postLength,
             itemBuilder: (BuildContext context, int i) {
               return BlogList(

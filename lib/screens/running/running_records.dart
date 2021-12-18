@@ -18,20 +18,16 @@ class _RunningRecordState extends State<RunningRecord> {
   bool circle = true;
 
   void getRunRecords() async {
-    print('get');
     setState(() {
       circle = true;
     });
     List<RunRecord> runRecords = await _geolocatorService.getRunRecords();
-    print(runRecords);
     if(runRecords.length > 0) {
-      if(mounted) {
-        setState(() {
-          runRecordsList  = runRecords;
-          runRecordsLength = runRecordsList.length;
-          circle = false;
-        });
-      }
+      setState(() {
+        runRecordsList  = runRecords;
+        runRecordsLength = runRecordsList.length;
+        circle = false;
+      });
     }
   }
 
@@ -40,6 +36,7 @@ class _RunningRecordState extends State<RunningRecord> {
     
     if(runRecords.length > 0) {
       setState(() {
+        circle = false;
         runRecordsList.clear();
         runRecordsList = runRecords;
         runRecordsLength = runRecordsList.length;
@@ -56,13 +53,14 @@ class _RunningRecordState extends State<RunningRecord> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: /*circle
+      child: circle
       ? Center(child: CircularProgressIndicator())
-      :*/ Container(
+      : Container(
         height: MediaQuery.of(context).size.height * 0.78,
         child: RefreshIndicator(
           onRefresh: refreshRecords,
-          child: ListView.builder(
+          child: runRecordsLength > 0
+          ? ListView.builder(
             itemCount: runRecordsLength,
             itemBuilder:(BuildContext context, int index) {
               return RunningRecordView(
@@ -75,7 +73,16 @@ class _RunningRecordState extends State<RunningRecord> {
                 },
               );
             }          
-          ),
+          )
+          : Center(
+            child: Text(
+              '尚未有紀錄',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 28
+              ),
+            ),
+          )
         ),
       ),
     );

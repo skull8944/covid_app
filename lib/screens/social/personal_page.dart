@@ -277,7 +277,9 @@ class _PersonalPageState extends State<PersonalPage> {
             children: <Widget>[
              
               Expanded(
-                child: myBlogList.length == 0
+                child: RefreshIndicator(
+                  onRefresh: refreshPost,
+                  child: myBlogList.length == 0
                   ? Container(
                     height: MediaQuery.of(context).size.height,
                     child: Center(
@@ -290,9 +292,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       )
                     )
                   )
-                  : RefreshIndicator(
-                    onRefresh: refreshPost,
-                    child: ListView.builder(
+                  : ListView.builder(
                     itemCount: postLength,
                     itemBuilder: (BuildContext context, int i) {
                       return BlogList(
@@ -305,8 +305,8 @@ class _PersonalPageState extends State<PersonalPage> {
                         },
                       );
                     }          
-                                  ),
                   ),
+                ),
               )                
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:covid_app/models/blog.dart';
 import 'package:covid_app/screens/running/running_marks.dart';
+import 'package:covid_app/screens/social/personal_page.dart';
 import 'package:covid_app/services/blog_service.dart';
 import 'package:covid_app/services/geolocator_service.dart';
 import 'package:covid_app/services/profile_service.dart';
@@ -86,7 +87,14 @@ class _BlogListState extends State<BlogList> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.blog.userName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                          InkWell(
+                            child: Text(widget.blog.userName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) => PersonalPage(userName: widget.blog.userName, imgUrl: imgUrl))
+                              );
+                            },
+                          ),
                           Text(widget.blog.updatedTime.substring(0,10), style: TextStyle(color: Colors.grey[700], fontSize: 10.5),)
                         ],
                       ),

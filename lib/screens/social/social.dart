@@ -60,33 +60,33 @@ class _SocialState extends State<Social> {
       backgroundColor: Color.fromARGB(255, 236, 236, 239),      
       body: circle
       ? Center(child: CircularProgressIndicator())
-      : postLength > 0
-        ? RefreshIndicator(
-          onRefresh: refreshPost,
-          child: ListView.builder(
-            itemCount: postLength,
-            itemBuilder:(BuildContext context, int i) {
-              return BlogList(
-                blog: friendPost[i],
-                deletePost: () {
-                
-                },
-              );
-            }          
-          ),
-        )
+      : RefreshIndicator(
+        onRefresh: refreshPost,
+        child: postLength > 0
+        ? ListView.builder(
+          itemCount: postLength,
+          itemBuilder:(BuildContext context, int i) {
+            return BlogList(
+              blog: friendPost[i],
+              deletePost: () {
+              
+              },
+            );
+          }          
+        )       
         : Container(
           height: MediaQuery.of(context).size.height * 0.7,
           child: Center(
-              child: Text(
-                '還沒有貼文',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600
-                ),
+            child: Text(
+              '還沒有貼文',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600
               ),
             ),
-        )      
+          ),
+        )
+      )      
     );
   }
 }

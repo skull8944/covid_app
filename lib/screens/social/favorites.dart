@@ -87,33 +87,32 @@ class _FavoritesState extends State<Favorites> {
                 },
               ),
             ),
-            postLength > 0
-            ? Expanded(
+            Expanded(
               child: RefreshIndicator(
-                onRefresh: refreshPost,
-                child: ListView.builder(
-                  itemCount: postLength,
-                  itemBuilder: (context, i) => BlogList(
-                    blog: favoriteBlog[i],
-                    deletePost: () {
-              
-                    }
-                  )
-                ),
+              onRefresh: refreshPost,
+              child: postLength > 0
+              ? ListView.builder(
+                itemCount: postLength,
+                itemBuilder: (context, i) => BlogList(
+                  blog: favoriteBlog[i],
+                  deletePost: () {
+            
+                  }
+                )
               )
-            )
-            : Container(
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: Center(
-                child: Text(
-                  '還沒有收藏的貼文',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600
+              : Container(
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: Center(
+                  child: Text(
+                    '還沒有收藏的貼文',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600
+                    ),
                   ),
                 ),
-              ),
-            )
+              ),)
+            ),
           ]
         )
       )

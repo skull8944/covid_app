@@ -25,6 +25,15 @@ class _FriendRequestState extends State<FriendRequest> {
     }
   }
 
+  Future refreshRequest() async {
+    list = await _friendService.getFriendRequests();
+    if(list.length > 0) {
+      setState(() {
+        listLength = list.length;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -72,133 +81,136 @@ class _FriendRequestState extends State<FriendRequest> {
                 },
               ),
             ),
-            listLength == 0
-            ? Container(
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: Center(
-                child: Text(
-                  '還沒有朋友請求',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600
-                  ),
-                ),
-              )
-            )
-            : Expanded(
-              child: ListView.builder(
-                itemCount: listLength,
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    MediaQuery.of(context).size.width * 0.1, 
-                    10,
-                    MediaQuery.of(context).size.width * 0.1,
-                    20
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    height: 125,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromARGB(255, 149, 148, 149),
-                          blurRadius: 2.0,
-                          spreadRadius: 0.0,
-                          offset: Offset(2.0, 2.0)
-                        )
-                      ]
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: refreshRequest,
+                child: listLength == 0
+                ? Container(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: Center(
+                    child: Text(
+                      '還沒有朋友請求',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600
+                      ),
                     ),
-                    child: Column(
-                      children: <Widget> [
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.black,
-                          ),
-                          title: Text(
-                            list[index]['requester'],
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PersonalPage(userName: list[index], imgUrl: 'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true')));
-                          },
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(14.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              InkWell(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(30),
-                                  child: Container(
-                                    color: Color.fromARGB(255, 246, 195, 100),
-                                    width: MediaQuery.of(context).size.width * 0.35,
-                                    height: 35,
-                                    child: Center(
-                                      child: Text(
-                                        'ACCEPT',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 15
-                                        ),
-                                      )
-                                    ),
-                                  ),
-                                ),
-                                onTap: () async {
-                                  dynamic result = await _friendService.acceptRequest(list[index]['requester']);
-                                  print(result);
-                                  if(result == 'success') {
-                                    list.removeAt(index);
-                                    setState(() {
-                                      listLength--;
-                                    });
-                                  }                     
-                                },
-                              ),
-                              InkWell(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(30),
-                                  child: Container(
-                                    color: Colors.grey[800],
-                                    width: MediaQuery.of(context).size.width * 0.35,
-                                    height: 35,
-                                    child: Center(
-                                      child: Text(
-                                        'DELETE',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 15
-                                        ),
-                                      )
-                                    ),
-                                  ),
-                                ),
-                                onTap: () async {
-                                  dynamic result = await _friendService.rejectRequest(list[index]['requester']);
-                                  print(result);
-                                  if(result == 'success') {
-                                    list.removeAt(index);
-                                    setState(() {
-                                      listLength--;
-                                    });
-                                  }                                  
-                                },
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    )
-                  ),
+                  )
                 )
+                : ListView.builder(
+                  itemCount: listLength,
+                  itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.1, 
+                      10,
+                      MediaQuery.of(context).size.width * 0.1,
+                      20
+                    ),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: 125,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(255, 149, 148, 149),
+                            blurRadius: 2.0,
+                            spreadRadius: 0.0,
+                            offset: Offset(2.0, 2.0)
+                          )
+                        ]
+                      ),
+                      child: Column(
+                        children: <Widget> [
+                          ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.black,
+                            ),
+                            title: Text(
+                              list[index]['requester'],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PersonalPage(userName: list[index], imgUrl: 'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true')));
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(14.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                InkWell(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: Container(
+                                      color: Color.fromARGB(255, 246, 195, 100),
+                                      width: MediaQuery.of(context).size.width * 0.35,
+                                      height: 35,
+                                      child: Center(
+                                        child: Text(
+                                          'ACCEPT',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15
+                                          ),
+                                        )
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () async {
+                                    dynamic result = await _friendService.acceptRequest(list[index]['requester']);
+                                    print(result);
+                                    if(result == 'success') {
+                                      list.removeAt(index);
+                                      setState(() {
+                                        listLength--;
+                                      });
+                                    }                     
+                                  },
+                                ),
+                                InkWell(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: Container(
+                                      color: Colors.grey[800],
+                                      width: MediaQuery.of(context).size.width * 0.35,
+                                      height: 35,
+                                      child: Center(
+                                        child: Text(
+                                          'DELETE',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15
+                                          ),
+                                        )
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () async {
+                                    dynamic result = await _friendService.rejectRequest(list[index]['requester']);
+                                    print(result);
+                                    if(result == 'success') {
+                                      list.removeAt(index);
+                                      setState(() {
+                                        listLength--;
+                                      });
+                                    }                                  
+                                  },
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ),
+                  )
+                ),
               ),
             )
           ],
