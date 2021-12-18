@@ -19,8 +19,12 @@ class _FriendListState extends State<FriendList> {
   int friendsLength = 0;
   List imgUrls = [];
   String imgUrl = 'https://stickershop.line-scdn.net/stickershop/v1/product/3349339/LINEStorePC/main.png;compress=true';
+  bool circle = false;
 
   void getFriends() async {
+    setState(() {
+      circle = true;
+    });
     List friendList = await _friendService.getFriends();
     if(friendList.length > 0) {
       for(var i = 0; i < friendList.length; i++) {
@@ -34,9 +38,15 @@ class _FriendListState extends State<FriendList> {
         friendsLength = friendList.length;
       });
     }
+    setState(() {
+      circle = false;
+    });
   }
 
   Future refreshFriends() async {
+    setState(() {
+      circle = true;
+    });
     List friendList = await _friendService.getFriends();
     if(friendList.length > 0) {
       for(var i = 0; i < friendList.length; i++) {
@@ -50,6 +60,9 @@ class _FriendListState extends State<FriendList> {
         friendsLength = friendList.length;
       });
     }
+    setState(() {
+      circle = false;
+    });
   }
 
   @override
@@ -96,20 +109,32 @@ class _FriendListState extends State<FriendList> {
                 },
               ),
             ),
-            Expanded(
+            circle
+            ? Center(child: CircularProgressIndicator(color: Colors.grey,))
+            : Expanded(
               child: RefreshIndicator(
                 onRefresh: refreshFriends,
                 child: friendsLength == 0
                 ? Container(
                   height: MediaQuery.of(context).size.height * 0.7,
                   child: Center(
-                    child: Text(
-                      '還沒有朋友',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600
+                    child: Column(
+                    children: [
+                      Text(
+                        '尚未有朋友',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 28
+                        ),
                       ),
-                    ),
+                      InkWell(
+                        child: Icon(Icons.replay_rounded, color: Colors.grey[800], size: 35,),
+                        onTap: () {
+                          getFriends();
+                        },
+                      )
+                    ],
+                  ),
                   )
                 )
                 : ListView.builder(

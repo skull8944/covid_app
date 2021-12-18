@@ -14,7 +14,7 @@ class _RunningRecordState extends State<RunningRecord> {
 
   GeolocatorService _geolocatorService = GeolocatorService();
   List<RunRecord> runRecordsList = [];
-  int runRecordsLength = 5;
+  int runRecordsLength = 0;
   bool circle = true;
 
   void getRunRecords() async {
@@ -23,12 +23,16 @@ class _RunningRecordState extends State<RunningRecord> {
     });
     List<RunRecord> runRecords = await _geolocatorService.getRunRecords();
     if(runRecords.length > 0) {
-      setState(() {
-        runRecordsList  = runRecords;
-        runRecordsLength = runRecordsList.length;
-        circle = false;
-      });
+      if(mounted) {
+        setState(() {
+          runRecordsList  = runRecords;
+          runRecordsLength = runRecordsList.length;
+        });
+      }
     }
+    setState(() {      
+      circle = false;
+    });
   }
 
   Future<void> refreshRecords() async {
@@ -36,12 +40,14 @@ class _RunningRecordState extends State<RunningRecord> {
     
     if(runRecords.length > 0) {
       setState(() {
-        circle = false;
         runRecordsList.clear();
         runRecordsList = runRecords;
         runRecordsLength = runRecordsList.length;
       });
     }
+    setState(() {      
+      circle = false;
+    });
   }
 
   @override
@@ -75,12 +81,22 @@ class _RunningRecordState extends State<RunningRecord> {
             }          
           )
           : Center(
-            child: Text(
-              '尚未有紀錄',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 28
-              ),
+            child: Column(
+              children: [
+                Text(
+                  '尚未有紀錄',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 28
+                  ),
+                ),
+                InkWell(
+                  child: Icon(Icons.replay_rounded, color: Colors.grey[800], size: 35,),
+                  onTap: () {
+                    getRunRecords();
+                  },
+                )
+              ],
             ),
           )
         ),

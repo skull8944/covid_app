@@ -45,7 +45,6 @@ class FriendService {
     if(res.statusCode == 200 || res.statusCode == 201) {
       List freindList = jsonDecode(res.body);
       friends = freindList;
-      print(friends[0]['requester']);
     }
 
     return friends;
@@ -68,6 +67,7 @@ class FriendService {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? userName = _prefs.getString('name');
     final res = await http.Client().get(Uri.parse('$host/friend/friend_status/$userName/$userName2'));
+    print('resStatus:' + res.body);
     if(res.statusCode == 200 || res.statusCode == 201) {
       friendStatus = int.parse(res.body);
     } 

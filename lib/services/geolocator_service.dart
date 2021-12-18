@@ -68,7 +68,6 @@ class GeolocatorService {
         );
       });
     }
-    print(records[0].marks);
     return records;
   }
 

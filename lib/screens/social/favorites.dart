@@ -25,15 +25,19 @@ class _FavoritesState extends State<Favorites> {
     if(favoriteBlogList.length > 0) {
       setState(() {
         favoriteBlog = favoriteBlogList;
-        postLength = favoriteBlog.length;
-        circle = false;
+        postLength = favoriteBlog.length;        
       });
     }
+    setState(() {
+      circle = false;
+    });
   }
 
   Future<void> refreshPost() async {
-    List<Blog> friendPostList = await _blogService.getFavoritePost();
-    
+    setState(() {
+      circle = true;
+    });
+    List<Blog> friendPostList = await _blogService.getFavoritePost();    
     if(friendPostList.length > 0) {
       setState(() {
         favoriteBlog.clear();
@@ -41,6 +45,9 @@ class _FavoritesState extends State<Favorites> {
         postLength = favoriteBlog.length;
       });
     }
+    setState(() {
+      circle = false;
+    });
   }
 
   @override
@@ -87,7 +94,9 @@ class _FavoritesState extends State<Favorites> {
                 },
               ),
             ),
-            Expanded(
+            circle
+            ? Center(child: CircularProgressIndicator(color: Colors.grey,))
+            : Expanded(
               child: RefreshIndicator(
               onRefresh: refreshPost,
               child: postLength > 0
@@ -100,18 +109,26 @@ class _FavoritesState extends State<Favorites> {
                   }
                 )
               )
-              : Container(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: Center(
-                  child: Text(
-                    '還沒有收藏的貼文',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600
+              : Center(
+                child: Column(
+                  children: [
+                    Text(
+                      '尚未有貼文',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 28
+                      ),
                     ),
-                  ),
+                    InkWell(
+                      child: Icon(Icons.replay_rounded, color: Colors.grey[800], size: 35,),
+                      onTap: () {
+                        getFavoritePost();
+                      },
+                    )
+                  ],
                 ),
-              ),)
+              ),
+              )
             ),
           ]
         )

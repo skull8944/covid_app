@@ -43,6 +43,9 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   Future<void> refreshPost() async {
+    setState(() {
+      circle = true;
+    });
     List<Blog> friendPostList = await _blogService.getPost(widget.userName);
     
     if(friendPostList.length > 0) {
@@ -52,6 +55,9 @@ class _PersonalPageState extends State<PersonalPage> {
         postLength = myBlogList.length;
       });
     }
+    setState(() {
+      circle = false;
+    });
   }
 
   void getFriendStatus() async {
@@ -120,9 +126,11 @@ class _PersonalPageState extends State<PersonalPage> {
                           if(result == 'success') {
                             setState(() {
                               friendStatus = 3;
-                              statusCircle = false;
                             });
                           }
+                          setState(() {
+                            statusCircle = false;
+                          });
                         },
                       ),
                     ),
@@ -143,10 +151,12 @@ class _PersonalPageState extends State<PersonalPage> {
                           dynamic result = await _friendService.rejectRequest(widget.userName);
                           if(result == 'success') {
                             setState(() {
-                              friendStatus = 0;
-                              statusCircle = false;
+                              friendStatus = 0;                              
                             });
                           }
+                          setState(() {
+                            statusCircle = false;
+                          });
                         },
                       ),
                     ),
@@ -183,10 +193,13 @@ class _PersonalPageState extends State<PersonalPage> {
                       if(result == 'success') {
                         setState(() {
                           friendStatus = 1;
-                          statusCircle = false;
                         });
+                        
                         print('status： '+friendStatus.toString());
                       }
+                      setState(() {
+                        statusCircle = false;
+                      });
                       break;
                     case 1:
                       print('reject');
@@ -197,11 +210,13 @@ class _PersonalPageState extends State<PersonalPage> {
                       print(result);
                       if(result == 'success') {
                         setState(() {
-                          friendStatus = 0;
-                          statusCircle = false;
+                          friendStatus = 0;                          
                         });
                         print('status： '+friendStatus.toString());
                       }
+                      setState(() {
+                        statusCircle = false;
+                      });
                       break;
                     case 3:
                       showDialog(
@@ -273,42 +288,46 @@ class _PersonalPageState extends State<PersonalPage> {
       ),
       backgroundColor: Color.fromARGB(255, 236, 236, 239),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            children: <Widget>[             
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: refreshPost,
-                  child: myBlogList.length == 0
-                  ? Container(
-                    height: MediaQuery.of(context).size.height,
-                    child: Center(
-                      child: Text(
-                        '還沒有貼文',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20
-                        ),
-                      )
-                    )
-                  )
-                  : ListView.builder(
-                    itemCount: postLength,
-                    itemBuilder: (BuildContext context, int i) {
-                      return BlogList(
-                        blog: myBlogList[i],
-                        deletePost: (String postID) {
-                          myBlogList.removeWhere((item) => item.postID == postID);
-                          setState(() {
-                            postLength--;
-                          });
-                        },
-                      );
-                    }          
+        child: circle
+        ? Center(child: CircularProgressIndicator(color: Colors.grey,),)
+        : RefreshIndicator(
+          onRefresh: refreshPost,
+          child: myBlogList.length == 0
+          ? Container(
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    '尚未有貼文',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 28
+                    ),
                   ),
-                ),
-              )                
-            ],
+                  InkWell(
+                    child: Icon(Icons.replay_rounded, color: Colors.grey[800], size: 35,),
+                    onTap: () {
+                      getPostList();
+                    },
+                  )
+                ],
+              ),
+            )
+          )
+          : ListView.builder(
+            itemCount: postLength,
+            itemBuilder: (BuildContext context, int i) {
+              return BlogList(
+                blog: myBlogList[i],
+                deletePost: (String postID) {
+                  myBlogList.removeWhere((item) => item.postID == postID);
+                  setState(() {
+                    postLength--;
+                  });
+                },
+              );
+            }          
           ),
         ),
       ),

@@ -41,6 +41,9 @@ class _MyPostState extends State<MyPost> {
   }
 
   Future<void> refreshPost() async {
+    setState(() {
+      circle = true;
+    });
     List<Blog> friendPostList = await _blogService.getMyPost();
     
     if(friendPostList.length > 0) {
@@ -50,6 +53,9 @@ class _MyPostState extends State<MyPost> {
         postLength = myBlogList.length;
       });
     }
+    setState(() {
+      circle = false;
+    });
   }
 
   @override
@@ -61,13 +67,29 @@ class _MyPostState extends State<MyPost> {
         iconTheme: IconThemeData(color: Colors.grey[850]),
       ),
       body: Center(
-        child: circle == true          
+        child: circle          
         ? CircularProgressIndicator()
-        :  RefreshIndicator(
+        :  myBlogList.length == 0
+          ? Column(
+            children: [
+              Text(
+                '尚未有貼文',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 28
+                ),
+              ),
+              InkWell(
+                child: Icon(Icons.replay_rounded, color: Colors.grey[800], size: 35,),
+                onTap: () {
+                  getPostList();
+                },
+              )
+            ],
+          )
+          : RefreshIndicator(
           onRefresh: refreshPost,
-          child:myBlogList.length == 0
-          ? Text('還沒有貼文')
-          : ListView.builder(
+          child: ListView.builder(
             itemCount: postLength,
             itemBuilder: (BuildContext context, int i) {
               return BlogList(
