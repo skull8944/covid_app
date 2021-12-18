@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class RunRecord {
 
   String runRecordID;
@@ -5,7 +7,7 @@ class RunRecord {
   String distance;
   String time;
   String calories;
-  List marks;
+  List<LatLng> marks;
 
   RunRecord(
     this.runRecordID,

@@ -13,23 +13,17 @@ class RunningRecord extends StatefulWidget {
 class _RunningRecordState extends State<RunningRecord> {
 
   GeolocatorService _geolocatorService = GeolocatorService();
-  List<RunRecord> runRecordsList = [
-    RunRecord('5','2021-01-05', '500', '60', '115', []),
-    RunRecord('4','2021-01-04', '400', '48', '114', []),
-    RunRecord('3','2021-01-03', '300', '36', '113', []),
-    RunRecord('2','2021-01-02', '200', '24', '112', []),
-    RunRecord('1','2021-01-01', '100', '12', '111', []),
-  ];
+  List<RunRecord> runRecordsList = [];
   int runRecordsLength = 5;
   bool circle = true;
 
   void getRunRecords() async {
-
+    print('get');
     setState(() {
       circle = true;
     });
     List<RunRecord> runRecords = await _geolocatorService.getRunRecords();
-    
+    print(runRecords);
     if(runRecords.length > 0) {
       if(mounted) {
         setState(() {
@@ -56,7 +50,7 @@ class _RunningRecordState extends State<RunningRecord> {
   @override
   void initState() {
     super.initState();
-    //getRunRecords();
+    getRunRecords();
   }
 
   @override
@@ -64,7 +58,7 @@ class _RunningRecordState extends State<RunningRecord> {
     return Center(
       child: /*circle
       ? Center(child: CircularProgressIndicator())
-      : */Container(
+      :*/ Container(
         height: MediaQuery.of(context).size.height * 0.78,
         child: RefreshIndicator(
           onRefresh: refreshRecords,

@@ -67,14 +67,7 @@ class _SocialState extends State<Social> {
             itemCount: postLength,
             itemBuilder:(BuildContext context, int i) {
               return BlogList(
-                postID: friendPost[i].postID,
-                userName: friendPost[i].userName, 
-                date: friendPost[i].updatedTime,
-                imgUrls: friendPost[i].images,
-                time: friendPost[i].time,
-                distance: friendPost[i].distance,
-                collect: friendPost[i].collect,
-                runRecordID: friendPost[i].runRecordId,
+                blog: friendPost[i],
                 deletePost: () {
                 
                 },

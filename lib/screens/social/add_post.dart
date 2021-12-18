@@ -65,7 +65,7 @@ class _AddPostState extends State<AddPost> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.26,
                   child: Center(
-                    child: Text('13m', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
+                    child: Text(widget.distance+'km', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),),
                   ),
                 ),
                 Container(
@@ -75,7 +75,7 @@ class _AddPostState extends State<AddPost> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.28,
-                  child:  Center(child: Text('06:12', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),)),
+                  child:  Center(child: Text(widget.time, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),)),
                 ),
                 Container(
                   height: 50,
@@ -84,7 +84,7 @@ class _AddPostState extends State<AddPost> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.26,
-                  child: Center(child: Text('132', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),)),
+                  child: Center(child: Text(widget.calories, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),)),
                 ),
                 
               ],

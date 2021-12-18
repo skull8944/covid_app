@@ -71,14 +71,7 @@ class _MyPostState extends State<MyPost> {
             itemCount: postLength,
             itemBuilder: (BuildContext context, int i) {
               return BlogList(
-                postID: myBlogList[i].postID,
-                userName: myBlogList[i].userName, 
-                date: myBlogList[i].updatedTime,
-                imgUrls: myBlogList[i].images,
-                time: myBlogList[i].time,
-                distance: myBlogList[i].distance,
-                collect: myBlogList[i].collect,
-                runRecordID: myBlogList[i].runRecordId,
+                blog: myBlogList[i],
                 deletePost: (String postID) {
                   myBlogList.removeWhere((item) => item.postID == postID);
                   setState(() {

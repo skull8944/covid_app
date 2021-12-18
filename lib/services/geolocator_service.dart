@@ -19,41 +19,43 @@ class GeolocatorService {
     return total;
   }
 
-  Future saveRecord(RunRecord record) async {
-    try {
-      SharedPreferences _prefs = await SharedPreferences.getInstance();
-      String userName = _prefs.getString('name').toString();
-      final res = await http.post(Uri.parse('$host/run/'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        body: jsonEncode({
-          'userName': userName,
-          'distance': record.distance,
-          'time': record.time,
-          'calories': record.calories,
-          'marks': record.marks
-        }));
-
-        if(res.statusCode == 200 || res.statusCode == 201) {
-        print(jsonDecode(res.body));
-        return (jsonDecode(res.body));
-      } else {
-        return ('error');
-      }  
-    } catch (err) {
-      print(err);
-    }
+  Future saveRecord(String distance, String time, String calories, List marks) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    String userName = _prefs.getString('name').toString();
+    final res = await http.post(Uri.parse('$host/run'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: jsonEncode({
+        'userName': userName,
+        'distance': distance,
+        'time': time,
+        'calories': calories,
+        'marks': marks
+      }));
+    print(res.statusCode);
+    if(res.statusCode == 200 || res.statusCode == 201) {
+      return 'success';
+    } else {
+      return 'error';
+    }          
+    
   }
 
   Future<List<RunRecord>> getRunRecords() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String userName = _prefs.getString('name').toString();
     List<RunRecord> records = [];
-    final res = await http.Client().get(Uri.parse('$host/run/$userName'));
+    final  res = await http.Client().get(Uri.parse('$host/run/$userName'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       List result = jsonDecode(res.body);
       result.forEach((e) {
+        List rec = e['marks'];
+        List<LatLng> marks = [];
+  
+        for(var i = 0; i < rec.length; i++) {
+          marks.add(LatLng(rec[i][0],rec[i][1]));
+        }
         records.add(
           RunRecord(
             e['_id'], 
@@ -61,27 +63,28 @@ class GeolocatorService {
             e['distance'], 
             e['time'], 
             e['calories'], 
-            e['marks']
+            marks
           )
         );
       });
     }
+    print(records[0].marks);
     return records;
   }
 
   Future deleteRecord(String recordID) async {
-    final res = await http.delete(Uri.parse('$host/run/marks/$recordID'));
+    final res = await http.delete(Uri.parse('$host/run/$recordID'));
     return res.body;
   }
     
   Future<List<LatLng>> getMarks(String runRecordID) async {
     List<LatLng> marks = [];
-    final res = await http.Client().get(Uri.parse('$host/run/$runRecordID'));
+    final res = await http.Client().get(Uri.parse('$host/run/marks/$runRecordID'));
     if(res.statusCode == 200 || res.statusCode == 201) {
       List result = jsonDecode(res.body);
       result.forEach((e) { 
         marks.add(
-          LatLng(e['latitude'], e['longitude'])
+          LatLng(e[0], e[1])
         );
       });
     }

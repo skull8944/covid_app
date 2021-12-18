@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:covid_app/services/geolocator_service.dart';
 import 'package:covid_app/services/profile_service.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,7 +16,7 @@ class RunningDetail extends StatefulWidget {
 
 class _RunningDetailState extends State<RunningDetail> {
 
-  bool _isRunning = false;
+  bool _isRunning = true;
   bool _openMap = false;
   bool _isPaused = false;
   double distance = 0;
@@ -34,6 +35,8 @@ class _RunningDetailState extends State<RunningDetail> {
   StreamSubscription<Position>? _getPositionStream;
   List<LatLng> marks = [];
   ProfileService _profileService = ProfileService();
+  GeolocatorService _geolocatorService = GeolocatorService();
+  Timer? _timer;
 
   void getWeight() async {
     final res = await _profileService.getPro();
@@ -45,12 +48,12 @@ class _RunningDetailState extends State<RunningDetail> {
 
   @override
   void initState() {
-    super.initState();      
+    super.initState();
     _getPositionStream = Geolocator.getPositionStream(
       desiredAccuracy: LocationAccuracy.best,
       distanceFilter: 0,
       forceAndroidLocationManager: false,
-      intervalDuration: Duration(milliseconds: 1000),
+      intervalDuration: Duration(seconds: 3),
     ).listen((position) {
       _mapController?.animateCamera(
           CameraUpdate.newCameraPosition(CameraPosition(zoom: 14, target: LatLng(position.latitude, position.longitude))));
@@ -59,10 +62,8 @@ class _RunningDetailState extends State<RunningDetail> {
       final PolylineId polylineId = PolylineId(polylineIdVal);
       marks.add(LatLng(position.latitude, position.longitude));
       setState(() {
-        time++;
         marksLength = marks.length;
       });
-      print(marksLength);
       if(marks.length > 2) {
         setState(() {
           distance += Geolocator.distanceBetween(
@@ -84,17 +85,23 @@ class _RunningDetailState extends State<RunningDetail> {
         });  
       }    
     });
+    _timer = Timer.periodic(Duration(seconds:1), (timer) { 
+      setState(() {
+        time += _tick;
+      });      
+    });    
     getWeight();
   }
 
   double getCalories(double weight, double distance) {
-    return weight*distance*1.036;
+    return weight*(distance/1000)*1.036;
   }
   
   @override
   void dispose() async {
     super.dispose();
      _getPositionStream!.cancel();
+     _timer!.cancel();
   }
 
   @override
@@ -283,6 +290,68 @@ class _RunningDetailState extends State<RunningDetail> {
                         color: Colors.grey[600],
                         size: 45,
                       ),
+                      onTap: () async {
+                        if(distance > 0) {
+                          final res = await _geolocatorService.saveRecord(
+                            (distance/1000).toStringAsFixed(2), 
+                            time.toString(), 
+                            getCalories(weight, distance).toStringAsFixed(2), 
+                            marks
+                          );
+                          print('res: '+res);
+                          if(res == 'success') {
+                            Navigator.pop(context);
+                          } else {
+                            showDialog(
+                            context: context, 
+                            builder: (BuildContext context) => Center(
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height * 0.1,      
+                                width: MediaQuery.of(context).size.width * 0.35,                
+                                child: Dialog(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                  insetPadding: EdgeInsets.zero,
+                                  child: Center(
+                                    child: Text(
+                                      '儲存失敗', 
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 28,
+                                        color: Colors.red
+                                      ),
+                                    ),
+                                  )
+                                ),
+                              ),
+                            ),
+                          );
+                          }                        
+                        } else {
+                          showDialog(
+                            context: context, 
+                            builder: (BuildContext context) => Center(
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height * 0.1,      
+                                width: MediaQuery.of(context).size.width * 0.35,                
+                                child: Dialog(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                  insetPadding: EdgeInsets.zero,
+                                  child: Center(
+                                    child: Text(
+                                      '請跑步', 
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 28,
+                                        color: Colors.red
+                                      ),
+                                    ),
+                                  )
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      },
                     )
                   ],
                 ),

@@ -1,3 +1,4 @@
+import 'package:covid_app/models/blog.dart';
 import 'package:covid_app/screens/running/running_marks.dart';
 import 'package:covid_app/services/blog_service.dart';
 import 'package:covid_app/services/geolocator_service.dart';
@@ -9,29 +10,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BlogList extends StatefulWidget {
-  final String postID;
-  final String userName;
-  final String date;
-  final List imgUrls;
-  final String distance;
-  final String time;
-  final bool collect;
-  final String runRecordID;
+  final Blog blog;
   final Function deletePost;
 
-  BlogList({ 
-    Key? key, 
-    required this.postID, 
-    required this.userName, 
-    required this.date, 
-    required this.imgUrls, 
-    required this.distance, 
-    required this.time,
-    required this.deletePost,
-    required this.collect,
-    required this.runRecordID
-  }) : super(key: key);
-
+  BlogList({Key? key, required this.blog, required this.deletePost }) : super(key: key);
   @override
   _BlogListState createState() => _BlogListState();
 }
@@ -57,14 +39,14 @@ class _BlogListState extends State<BlogList> {
   void initState() {    
     super.initState();
     setState(() {
-      collectState = widget.collect;
+      collectState = widget.blog.collect;
     });
     getMyName();
     _getImgUrl();
   }
 
   void _getImgUrl() async {
-    final res = await _profileService.getFriendPro(widget.userName);
+    final res = await _profileService.getFriendPro(widget.blog.userName);
     if(mounted) {
       setState(() {
         imgUrl = res.imgUrl;
@@ -104,14 +86,14 @@ class _BlogListState extends State<BlogList> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.userName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
-                          Text(widget.date.substring(0,10), style: TextStyle(color: Colors.grey[700], fontSize: 10.5),)
+                          Text(widget.blog.userName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                          Text(widget.blog.updatedTime.substring(0,10), style: TextStyle(color: Colors.grey[700], fontSize: 10.5),)
                         ],
                       ),
                       InkWell(
                         child: Icon(Icons.location_on_sharp, color: Colors.grey[700], size: 35.0,),
                         onTap: () async {
-                          List<LatLng> marks = await _geolocatorService.getMarks(widget.runRecordID);
+                          List<LatLng> marks = await _geolocatorService.getMarks(widget.blog.runRecordId);
                           showDialog(
                             context: context, 
                             builder: (BuildContext context) => SizedBox(
@@ -128,7 +110,7 @@ class _BlogListState extends State<BlogList> {
                       ),
                     ],
                   ),
-                  trailing: myName == widget.userName
+                  trailing: myName == widget.blog.userName
                   ? InkWell(
                     child: Icon(
                       Icons.more_vert_rounded,
@@ -148,7 +130,7 @@ class _BlogListState extends State<BlogList> {
                       color: Colors.grey[700], size: 35.0,
                     ),
                     onTap: () async {
-                      dynamic result = await _blogService.collect(widget.postID, !collectState);
+                      dynamic result = await _blogService.collect(widget.blog.postID, !collectState);
                       if(result == 'success') {
                         setState(() {
                           collectState = !collectState;
@@ -169,7 +151,7 @@ class _BlogListState extends State<BlogList> {
                         );
                       },
                     ),
-                    items: widget.imgUrls.map(
+                    items: widget.blog.images.map(
                       (item) =>  Card(
                         semanticContainer: true,
                         elevation: 1.0,
@@ -236,13 +218,13 @@ class _BlogListState extends State<BlogList> {
                                   )
                                 ),
                                 onTap: () async {
-                                  final res = await _blogService.deletePost(widget.postID);
+                                  final res = await _blogService.deletePost(widget.blog.postID);
                                   print(res);
                                   setState(() {
                                     showMore = false;
                                   });
                                   if(res == 'success') {                            
-                                    widget.deletePost(widget.postID);
+                                    widget.deletePost(widget.blog.postID);
                                   }
                                   Navigator.pop(context);
                                 },
@@ -273,8 +255,8 @@ class _BlogListState extends State<BlogList> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.imgUrls.map((urlOfItem) {
-                  int index = widget.imgUrls.indexOf(urlOfItem);
+                children: widget.blog.images.map((urlOfItem) {
+                  int index = widget.blog.images.indexOf(urlOfItem);
                   return Container(
                     width: 10.0,
                     height: 10.0,
@@ -301,7 +283,7 @@ class _BlogListState extends State<BlogList> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(right: 5),
-                          child: Text(widget.time, style: TextStyle(color: Colors.grey[750]),),
+                          child: Text(widget.blog.time, style: TextStyle(color: Colors.grey[750]),),
                         ),
                       ],
                     )
@@ -314,7 +296,7 @@ class _BlogListState extends State<BlogList> {
                           padding: EdgeInsets.only(right: 5),
                           child: SvgPicture.asset('assets/img/distance.svg', color: Colors.grey[750],),
                         ),
-                        Text(widget.distance, style: TextStyle(color: Colors.grey[750]),),
+                        Text(widget.blog.distance+'km', style: TextStyle(color: Colors.grey[750]),),
                       ],
                     )
                   )

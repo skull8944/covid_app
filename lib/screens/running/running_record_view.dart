@@ -48,7 +48,7 @@ class _RunningRecordViewState extends State<RunningRecordView> {
                     color: Color.fromARGB(255, 246, 195, 100),
                     child: Center(
                       child: Text(
-                        '${widget.runRecord.date}',
+                        '${widget.runRecord.date.substring(0,10)}',
                         style: TextStyle(
                           color: Colors.white, 
                           fontWeight: FontWeight.w600, 
@@ -88,7 +88,7 @@ class _RunningRecordViewState extends State<RunningRecordView> {
                     builder: (BuildContext context) {
                       return AddPost(
                         runRecordID: widget.runRecord.runRecordID,
-                        distance: widget.runRecord.distance + 'm',
+                        distance: widget.runRecord.distance ,
                         time: (int.parse(widget.runRecord.time)~/60).toString() + ':' + (int.parse(widget.runRecord.time)%60).toString(),
                         calories: widget.runRecord.calories
                       );
@@ -111,7 +111,7 @@ class _RunningRecordViewState extends State<RunningRecordView> {
                       child: Dialog(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                         insetPadding: EdgeInsets.zero,
-                        child: RunningMarks(marks: [],)
+                        child: RunningMarks(marks: widget.runRecord.marks,)
                       ),
                     ),
                   );

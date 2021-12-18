@@ -94,14 +94,7 @@ class _FavoritesState extends State<Favorites> {
                 child: ListView.builder(
                   itemCount: postLength,
                   itemBuilder: (context, i) => BlogList(
-                    postID: favoriteBlog[i].postID, 
-                    userName: favoriteBlog[i].userName, 
-                    date: favoriteBlog[i].updatedTime, 
-                    imgUrls: favoriteBlog[i].images, 
-                    distance: favoriteBlog[i].distance, 
-                    time: favoriteBlog[i].time,
-                    collect: favoriteBlog[i].collect,
-                    runRecordID: favoriteBlog[i].runRecordId,
+                    blog: favoriteBlog[i],
                     deletePost: () {
               
                     }

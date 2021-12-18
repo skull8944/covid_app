@@ -11,24 +11,20 @@ class RunningMarks extends StatefulWidget {
 
 class _RunningMarksState extends State<RunningMarks> {
 
-  List<LatLng> marks = [
-    LatLng(22.6192, 120.2978),
-    LatLng(22.6193, 120.2959),
-    LatLng(22.6118, 120.3001)
-  ];  
   Map<PolylineId, Polyline> polylines = <PolylineId, Polyline> {};
 
   @override
   void initState() {
     super.initState();
-    for(int i = 0; i < marks.length; i++) { 
+    print(widget.marks);
+    for(int i = 0; i < widget.marks.length; i++) { 
       final PolylineId polylineId = PolylineId('polyline_id_$i');
       final Polyline polyline = Polyline(
         polylineId: polylineId,
         consumeTapEvents: false,
         color: Colors.orange,
         width: 5,
-        points: marks,
+        points: widget.marks,
       );
       if(mounted) {
         setState(() {
@@ -50,7 +46,7 @@ class _RunningMarksState extends State<RunningMarks> {
       child: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
-          target: LatLng(marks[0].latitude, marks[0].longitude),
+          target: LatLng(widget.marks[0].latitude, widget.marks[0].longitude),
           zoom: 14,
         ),
         polylines: Set<Polyline>.of(polylines.values),
