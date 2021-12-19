@@ -20,7 +20,7 @@ class BlogList extends StatefulWidget {
 }
 
 class _BlogListState extends State<BlogList> {
-  final host = 'http://172.20.10.13:7414/';
+  final host = 'http://120.114.170.16:7414/';
   bool showMore = false;
   String myName = '';
   String imgUrl = '';

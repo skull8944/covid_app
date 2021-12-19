@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return circle
-    ? CircularProgressIndicator()
+    ? CircularProgressIndicator(color: Colors.grey,)
     : _hasProfile 
       ? Scaffold(
         appBar: screenIndex == 0

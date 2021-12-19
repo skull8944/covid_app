@@ -33,6 +33,7 @@ class _SettingsFormState extends State<SettingsForm> {
       if (pickedFile != null) {
         file = File(pickedFile.path);
         filePath = pickedFile.path;
+        print(filePath);
       } else {
         print('No image selected.');
       }
@@ -185,7 +186,7 @@ class _SettingsFormState extends State<SettingsForm> {
                         });
                         dynamic result = await _profileService.uploadProfile(_sex, _height.toString(), _weight.toString(), birthDateInString);
                         print(result);
-                        if(result != 'wrong') {
+                        if(result != 'fail') {
                           if(filePath != null) {
                             dynamic imgResult = await _profileService.patchImage(filePath);
                             print(imgResult);
@@ -231,14 +232,14 @@ class _SettingsFormState extends State<SettingsForm> {
               onPressed: () {
                 getImage(ImageSource.camera);
               },
-              label: Text("Camera", style: TextStyle(color: Colors.grey[700], fontSize: 20),),
+              label: Text("相機", style: TextStyle(color: Colors.grey[700], fontSize: 20),),
             ),
             TextButton.icon(
               icon: Icon(Icons.image, color: Colors.grey[700],),
               onPressed: () {
                 getImage(ImageSource.gallery);
               },
-              label: Text("Gallery", style: TextStyle(color: Colors.grey[700], fontSize: 20),),
+              label: Text("相簿", style: TextStyle(color: Colors.grey[700], fontSize: 20),),
             ),
           ])
         ],

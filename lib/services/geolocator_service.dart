@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class GeolocatorService {
 
-  final String host = 'http://172.20.10.13:7414';
+  final String host = 'http://120.114.170.16:7414';
   
   //算距離：每兩個點算加上去，for(var i = 0; i < n -1; i++) { a[i] + a[i+1] }
   double? calculateDistance(List<Position> list) {

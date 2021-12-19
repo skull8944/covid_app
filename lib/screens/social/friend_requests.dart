@@ -1,5 +1,4 @@
 import 'package:covid_app/screens/social/friend_request_view.dart';
-import 'package:covid_app/screens/social/personal_page.dart';
 import 'package:covid_app/services/friend_service.dart';
 import 'package:flutter/material.dart';
 
@@ -107,7 +106,7 @@ class _FriendRequestState extends State<FriendRequest> {
                     child: Column(
                       children: [
                         Text(
-                          '尚未朋友請求',
+                          '尚未有朋友請求',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 28

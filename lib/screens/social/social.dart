@@ -29,16 +29,20 @@ class _SocialState extends State<Social> {
      if(mounted) {
        setState(() {
         friendPost = friendPostList;
-        postLength = friendPost.length;
-        circle = false;
+        postLength = friendPost.length;        
       });
      }
    }
+   setState(() {
+     circle = false;
+   });
   }
 
   Future<void> refreshPost() async {
     List<Blog> friendPostList = await _blogService.getFriendPost();
-    
+    setState(() {
+      circle = true;
+    });
     if(friendPostList.length > 0) {
       setState(() {
         friendPost.clear();
@@ -46,6 +50,9 @@ class _SocialState extends State<Social> {
         postLength = friendPost.length;
       });
     }
+    setState(() {
+      circle = false;
+    });
   }
 
   @override
@@ -77,14 +84,24 @@ class _SocialState extends State<Social> {
         : Container(
           height: MediaQuery.of(context).size.height * 0.7,
           child: Center(
-            child: Text(
-              '還沒有貼文',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600
-              ),
+            child: Column(
+              children: [
+                Text(
+                  '尚未有貼文',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 28
+                  ),
+                ),
+                InkWell(
+                  child: Icon(Icons.replay_rounded, color: Colors.grey[800], size: 35,),
+                  onTap: () {
+                    getPosts();
+                  },
+                )
+              ],
             ),
-          ),
+          )
         )
       )      
     );

@@ -3,6 +3,7 @@ import 'package:covid_app/services/blog_service.dart';
 import 'package:covid_app/services/friend_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'blogList.dart';
 
@@ -25,6 +26,17 @@ class _PersonalPageState extends State<PersonalPage> {
   int postLength = 0;
   int friendStatus = 0;
   List friendStatusList = ['加好友', '申請中', {'確認', '取消'}, '好友'];
+  String myName = '';
+
+  void getMyname() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    String? name = _prefs.getString('name');
+    if(name != '') {
+      setState(() {
+        myName = name!;
+      });
+    }
+  }
 
   void getPostList() async {
     setState(() {
@@ -78,6 +90,7 @@ class _PersonalPageState extends State<PersonalPage> {
     super.initState();
     getFriendStatus();
     getPostList();
+    getMyname();
   }
   
   @override
@@ -107,6 +120,8 @@ class _PersonalPageState extends State<PersonalPage> {
             ),     
             statusCircle
             ? CircularProgressIndicator()               
+            : widget.userName == myName
+            ? SizedBox(width: 0, height: 0,)
             : friendStatus == 2
               ? Row(
                 children: <Widget>[

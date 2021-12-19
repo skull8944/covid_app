@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth{
-  final String host = 'http://172.20.10.13:7414';
+  final String host = 'http://120.114.170.16:7414';
   Future signup(String email, String password, String name) async{
     var res = await http.post(Uri.parse("$host/signup"),
       headers: <String, String>{

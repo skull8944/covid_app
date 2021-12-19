@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class FriendService {
-  final String host = 'http://172.20.10.13:7414';
+  final String host = 'http://120.114.170.16:7414';
   Future addFriend(String userName2) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String? userName = _prefs.getString('name');

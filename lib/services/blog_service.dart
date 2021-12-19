@@ -4,7 +4,7 @@ import 'package:covid_app/models/blog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BlogService {
-  final String host = 'http://172.20.10.13:7414';
+  final String host = 'http://120.114.170.16:7414';
   Future postBlog(String runRecordID, String distance, String time) async {
     try {
       SharedPreferences _prefs = await SharedPreferences.getInstance();

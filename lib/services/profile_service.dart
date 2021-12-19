@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class ProfileService {
   
-  final String host = "http://172.20.10.13:7414";
+  final String host = "http://120.114.170.16:7414";
 
   Future uploadProfile(String sex, String height, String weight, String birthdate) async {
     try {
@@ -24,12 +24,13 @@ class ProfileService {
         }));
 
       if(res.statusCode == 200 || res.statusCode == 201) {
-        return (jsonDecode(res.body));
+        return 'success';
       } else {
-        return ('error');
+        return 'fail';
       }   
     } catch(err) {
       print(err);
+      return 'error';
     }
   }
 
@@ -38,16 +39,12 @@ class ProfileService {
     var name = prefs.getString('name');
     final res = await http.Client().get(Uri.parse('$host/user_profile/$name'));
     print('$host/user_profile/$name');
-    print(res.statusCode);
-    print(jsonDecode(res.body));
     if(res.statusCode == 200 || res.statusCode == 201) {
-      print('get');
       var result = jsonDecode(res.body);
       String imgUrl = host + '/' + result['headshot'].replaceAll(r'\', r'/');
       Profile profile = Profile(name!, result['sex'], result['height'], result['weight'], result['birthdate'], imgUrl);
       return profile;
     } else {
-      print('no data');
       return 'no data';
     }      
   }

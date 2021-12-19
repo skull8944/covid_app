@@ -30,9 +30,11 @@ class _RunningRecordState extends State<RunningRecord> {
         });
       }
     }
-    setState(() {      
-      circle = false;
-    });
+    if(mounted) {
+      setState(() {      
+        circle = false;
+      });
+    }    
   }
 
   Future<void> refreshRecords() async {
