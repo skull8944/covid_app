@@ -58,7 +58,9 @@ class _SocialState extends State<Social> {
   Widget build(BuildContext context) {
     return Scaffold(     
       backgroundColor: Color.fromARGB(255, 236, 236, 239),      
-      body: RefreshIndicator(
+      body: circle
+      ? Center(child: CircularProgressIndicator(color: Colors.grey,))
+      : RefreshIndicator(
         onRefresh: refreshPost,
         child: postLength > 0
         ? ListView.builder(
@@ -72,16 +74,14 @@ class _SocialState extends State<Social> {
             );
           }          
         )       
-        : SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: Center(
-              child: Text(
-                '還沒有貼文',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600
-                ),
+        : Container(
+          height: MediaQuery.of(context).size.height * 0.7,
+          child: Center(
+            child: Text(
+              '還沒有貼文',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600
               ),
             ),
           ),
